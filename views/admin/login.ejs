@@ -1,0 +1,38 @@
+<%- include('./partials/header') %>
+
+<h1>Admin Login</h1>
+<form>
+  <lable for="email">Email: </lable>
+  <input type="text" name="email" class="email" />
+  <label for="password">Password: </label>
+  <input type="password" name="password" />
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+  const form = document.querySelector("form");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = form.email.value;
+    const password = form.password.value;
+
+    const data = { email, password };
+
+    fetch("/admin/login", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then( async (res) => {
+        const response = await res.json();
+        if(response.user){
+            location.assign('/admin');
+        }
+    });
+
+    console.log("form submitted");
+  });
+</script>
+
+<%- include('./partials/footer') %>

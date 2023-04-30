@@ -1,0 +1,12 @@
+<%- include('partials/header') %>
+<h1>Admin Blogs</h1>
+<%  if(blogs.length > 0 ){ %>
+
+<% blogs.forEach((blog)=>{ %>
+<h2><%= blog.title %></h2>
+<p><%= blog.description %></p>
+<br />
+<% }) %> <%- include('partials/footer') %>
+<% }else{ %>
+<h2>You don't have any blogs</h2>
+<% } %>
