@@ -18,13 +18,24 @@ const errorHandler = (err) => {
   return errors;
 };
 
-module.exports.admin_get = (req, res) => {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.status(200).redirect("/admin/login");
-  }
+module.exports.admin_get = async (req, res) => {
+  // const token = req.cookies.token;
+  // if (!token) {
+  //   return res.status(200).redirect("/admin/login");
+  // }
+  const user = await User.findById(req.id);
+  console.log(user);
   // res.cookie('jwt','token');
-  return res.status(200).render("admin/index");
+  return res
+    .status(200)
+    .render("admin/index", {
+      firstname: user.firstname,
+      lastname: user.lastname,
+      username: user.username,
+      email: user.email,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    });
 };
 
 module.exports.admin_blog_get = (req, res) => {
@@ -34,7 +45,7 @@ module.exports.admin_blog_get = (req, res) => {
 module.exports.admin_blog_post = (req, res) => {
   // const data = req.body;
   const id = req.id;
-  Blog.create({ ...req.body, author: id })
+  Blog.create({ ...req.body, author_id: id })
     .then((blog) => {
       res.json(blog);
     })
@@ -48,9 +59,31 @@ module.exports.admin_blog_post = (req, res) => {
 module.exports.admin_blogs_get = async (req, res) => {
   const id = req.id;
   try {
-    const blogs = await Blog.find({ author: id }).sort({createdAt:-1});
-    res.status(200).render('admin/blogs', {blogs});
+    const blogs = await Blog.find({ author_id: id }).sort({ createdAt: -1 });
+    res.status(200).render("admin/blogs", { blogs });
   } catch (err) {
     console.log(err);
+  }
+};
+
+//delete-all-users
+module.exports.delete_all_users = async (req, res) => {
+  try {
+    const users = await User.deleteMany({});
+    res.status(200).json(users);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+//delete-all-blogs
+module.exports.delete_all_blogs = async (req, res) => {
+  try {
+    const blogs = await Blog.deleteMany({});
+    res.status(200).json(blogs);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err.message });
   }
 };

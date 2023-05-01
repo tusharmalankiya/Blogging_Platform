@@ -5,8 +5,12 @@ require("dotenv").config();
 
 
 const errorHandler = (err) =>{
-  console.log(err);
+  console.log(err.message);
   const errors = {
+    firstname:'',
+    lastname: '',
+    username: '',
+    phone: '',
     email: '',
     password: ''
   }
@@ -21,7 +25,16 @@ const errorHandler = (err) =>{
 
   if(err.code === 11000){
     // console.log(err.code)
+    console.log(err.keyValue);
+    if(err.keyValue.email){
     errors.email = 'email is already exists';
+    }
+    if(err.keyValue.username){
+      errors.username = 'username is already exists';
+    }
+    if(err.keyValue.phone){
+      errors.phone = "phone numer is already exists";
+    }
   }
 
   if(err.message.includes('user validation failed')){
@@ -44,8 +57,9 @@ const createToken = (id) => {
 
 //get requests controllers
 module.exports.admin_login_get = (req, res) => {
-  const token = req.cookies.token;
-  if (token) {
+  const id = req.id;
+  console.log(req.id);
+  if (id) {
     return res.redirect("/admin");
   }
   return res.render("admin/login");
@@ -54,6 +68,8 @@ module.exports.admin_login_get = (req, res) => {
 module.exports.admin_register_get = (req, res) =>{
   res.status(200).render('admin/register');
 }
+
+
 //post requests controllers
 module.exports.admin_register_post = (req, res) => {
   // console.log(req.body);
@@ -64,7 +80,7 @@ module.exports.admin_register_post = (req, res) => {
     .catch((err) => {
       const errors = errorHandler(err)
       // console.log(err);
-      res.status(400).json(errors);
+      res.status(400).json({errors});
     });
 };
 

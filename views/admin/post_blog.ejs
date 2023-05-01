@@ -1,12 +1,19 @@
 <%- include('./partials/header') %>
+<%- include('partials/navbar') %>
 
 <h1>Blog post</h1>
 <form>
+    <div>
+
     <lable for="title">Title:
     </lable>
     <input type="text" name="title" />
+</div>
+
     <label for="description">Description:</label>
-    <input type="text" name="description" />
+    <div>
+    <textarea name="description" rows="4" cols="50"></textarea> 
+    </div>
     <button type="submit">Submit</button>
 </form>
 

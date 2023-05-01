@@ -1,9 +1,21 @@
 <%- include('partials/header') %>
-<h1>Tushar's Blogs :</h1>
+<h1>Liberty of Blogs :</h1>
+<hr />
+<br />
+<br />
 
 <% blogs.forEach((blog) =>{ %>
-    <h2><%= blog.title %></h2>
-    <p><%= blog.description %></p>
-    <br />
- <% }) %>
-<%- include('partials/footer') %>
+  <div>
+    <h1>Author Details:</h1>
+    <h3>Author: <a href="/blogs/author/<%= blog.author_id %>"> <%= blog.firstname + ' ' + blog.lastname  %></h3></a>
+    <h3>email: <%= blog.email %></h3>
+    <h3>Last Update: <%= blog.updatedAt %></h3>
+</div>
+<h2><%= blog.title %></h2>
+  <p class="description"><%= blog.description.substring(1, 100) + '...' %><a href="/blogs/<%= blog._id %>">more</a></p>
+
+<br />
+<hr />
+
+
+<% }) %> <%- include('partials/footer') %>

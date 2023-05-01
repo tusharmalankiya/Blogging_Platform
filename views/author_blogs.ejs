@@ -1,0 +1,18 @@
+<%- include('partials/header') %>
+
+<h1>Blogs</h1>
+<hr />
+<br />
+<br />
+<% blogs.forEach((blog)=>{ %>
+    <hr />
+   
+    <div>
+        <h2> <%= blog.title %></h2>
+        <p> <%= blog.description %> </p>
+    </div>
+    <br />
+    <hr />
+<% }) %>
+
+<%- include('partials/footer') %>
