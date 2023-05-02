@@ -1,21 +1,51 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Navbar</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/admin">Admin</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+<div class="navbar-side-menu">
+  <ul class="nav-options">
+    <li class="navbar-menu-item"><a href="/">Home</a></li>
+    <!-- <li class="navbar-menu-item"><a href="/">Authors</a></li> -->
+    
+    <li class="navbar-menu-item login"><a href="/admin">Profile</a></li>
+    <li class="navbar-menu-item login"><a href="/admin/blogs">Your Blogs</a></li>
+    <li class="navbar-menu-item login"><a href="/admin/blog">New Blog</a></li>
+    <li class="navbar-menu-item login"><a href="/admin">Manage</a></li>
+    <li class="navbar-menu-item login" onclick="signout()"><a href="/admin/logout">Sign Out</a></li>
+   
+    <li class="navbar-menu-item logout"><a href="/admin/login">Sign In</a></li>
+    <li class="navbar-menu-item logout"><a href="/admin/register">Sign Up</a></li>
+   
+  </ul>
+</div>
+<div class="navbar-layer" onclick="close_navbar()"></div>
+
+
+<div class="navbar-container">
+  <div class="navbar">
+    <div class="navbar-options" onclick="clicked()"><img src='/assets/menu.png' /></div>
+    <a href="/"><div class="navbar-logo">Screwy</div></a>
+    <div class="navbar-search"><img src='/assets/search.png' /></div>
+  </div>
+</div>
+
+<script>
+  if(localStorage.getItem('login')){
+    document.querySelectorAll('.navbar-menu-item.login').forEach(element=>{
+      console.log(element);
+      element.style.display = "initial";
+    });
+    document.querySelectorAll('.navbar-menu-item.logout').forEach(element=>{
+      element.style.display = "none";
+    });
+  }else{
+    document.querySelectorAll('.navbar-menu-item.login').forEach(element=>{
+      console.log(element);
+      element.style.display = "none";
+    });
+    document.querySelectorAll('.navbar-menu-item.logout').forEach(element=>{
+      element.style.display = "initial";
+    });
+  }
+
+  const signout = () =>{
+    localStorage.clear();
+  }
+</script>
+

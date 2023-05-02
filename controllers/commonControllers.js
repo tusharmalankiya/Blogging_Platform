@@ -3,7 +3,7 @@ const Blog = require("./../models/Blog");
 
 module.exports.blogs_get = async (req, res) => {
   const data = [];
-  Blog.find()
+  Blog.find().sort({createdAt: -1})
     .populate("author_id")
     .then((blogs) => {
       blogs.forEach((blog) => {

@@ -1,9 +1,23 @@
-*{
-    margin: 0;
-    padding: 0;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto&display=swap");
+@import url("./navbar.css");
+@import url("./blog_card.css");
+
+:root {
+  --background-color: #54cbca;
 }
 
-body{
-    padding: 20px;
-    text-align: center;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  /* overflow: hidden; */
+}
+
+body {
+  padding: 20px;
+  background: var(--background-color);
+  padding: 40px;
+  font-family: "Roboto", sans-serif;
+  /* overflow: hidden; */
 }

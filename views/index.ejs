@@ -1,21 +1,33 @@
-<%- include('partials/header') %>
-<h1>Liberty of Blogs :</h1>
-<hr />
-<br />
-<br />
-
-<% blogs.forEach((blog) =>{ %>
-  <div>
-    <h1>Author Details:</h1>
-    <h3>Author: <a href="/blogs/author/<%= blog.author_id %>"> <%= blog.firstname + ' ' + blog.lastname  %></h3></a>
-    <h3>email: <%= blog.email %></h3>
-    <h3>Last Update: <%= blog.updatedAt %></h3>
+<%- include('partials/header') %> <% blogs.forEach((blog) =>{ %>
+<div class="blog_card_container">
+  <img class="blog_img" src="/assets/blog_img.jpg" alt="BlogImage" />
+  <div class="blog">
+    <div>
+    <div class="blog_details">
+      <!-- <p><%= blog.email %></p> -->
+      <p class="blog_date"><%= blog.updatedAt.toLocaleString() %></p>
+    </div>
+    <div>
+      <h2 class="blog_title"><%= blog.title %></h2>
+      <!-- </div> -->
+      <!-- <div> -->
+      <p class="blog_description">
+        <%= blog.description.substring(0, 200) + '...' %>
+      </p>
+      
+    </div>
+    </div>
+    <div class="blog_card_bottom">
+      <div class="more">
+        <a href="/blogs/<%= blog._id %>">Continue Reading</a>
+      </div>
+      <div class="author">
+        <a href="/blogs/author/<%= blog.author_id %>">
+          <%= blog.firstname + ' ' + blog.lastname %></a
+        >
+      </div>
+    </div>
+  </div>
 </div>
-<h2><%= blog.title %></h2>
-  <p class="description"><%= blog.description.substring(1, 100) + '...' %><a href="/blogs/<%= blog._id %>">more</a></p>
-
-<br />
-<hr />
-
 
 <% }) %> <%- include('partials/footer') %>

@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Sigmar&display=swap");
+
+.navbar-container {
+  background: white;
+  border-radius: 50px;
+  padding: 10px;
+  margin: 30px 0;
+  color: #353a44;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+}
+
+.navbar-options img {
+  height: 30px;
+  width: 30px;
+}
+.navbar-logo {
+  color: black;
+  font-size: 40px;
+  font-family: "Sigmar", cursive;
+}
+
+.navbar-search img {
+  box-sizing: border-box;
+  height: 40px;
+  width: 40px;
+  margin: auto;
+}
+
+.navbar-search {
+  padding: 0 15px;
+}
+
+
+.navbar-side-menu{
+  /* position: absolute; */
+  left: 0;
+  top:0;
+  bottom: 0;
+  z-index: 2;
+  position: fixed;
+  overflow-x: hidden;
+  transition: 0.2s all;
+  height: 100%;
+  width: 0;
+  background: #fff;
+  /* display: none; */
+}
+
+ul.nav-options{
+padding: 20px;
+}
+
+li.navbar-menu-item{
+  list-style: none;
+}
+
+li.navbar-menu-item a{
+  display: block;
+  padding:10px;
+}
+
+.navbar-layer{
+position: absolute;
+left:0;
+bottom:0;
+top:0;
+width:100%;
+height:100%;
+background: black;
+opacity: 0.6;
+z-index: 1;
+display: none;
+}
+
+@media screen and (max-width: 700px) {
+  .navbar-logo {
+    font-size: 30px;
+  }
+}
