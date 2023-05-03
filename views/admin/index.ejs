@@ -30,6 +30,7 @@
       <strong>Phone : </strong
       ><input type="text" name="phone" value="<%= phone %>" disabled />
       <button id="phone" type="button" onclick="unlock(this.id)">Edit</button>
+      <button type="button" onclick="remove_phone()">Remove</button>
       <div class="phone error"></div>
 
     </p>
@@ -55,8 +56,15 @@
 <a href="/admin/logout">Logout</a>
 
 <script>
-  // const firstname = document.getElementsByName('firstname');
-  // let is_edited = false;
+
+const form = document.getElementById('profile_update_form');
+
+  const firstnameError = document.querySelector('.firstname.error');
+  const usernameError = document.querySelector('.username.error');
+  const emailError = document.querySelector('.email.error');
+  const lastnameError = document.querySelector('.lastname.error');
+  const phoneError = document.querySelector('.phone.error');
+  
   const unlock = (id) => {
     console.log(id);
     is_edited = true;
@@ -65,12 +73,22 @@
     console.log("clicked");
   };
 
-  const form = document.getElementById('profile_update_form');
-  const firstnameError = document.querySelector('.firstname.error');
-  const usernameError = document.querySelector('.username.error');
-  const emailError = document.querySelector('.email.error');
-  const lastnameError = document.querySelector('.lastname.error');
-  const phoneError = document.querySelector('.phone.error');
+  const remove_phone = async () =>{
+    const response = await fetch('/admin/remove-phone',{
+      method:'DELETE',
+      headers: {
+        'Content-Type':'application/json'
+      }
+    });
+    const res = await response.json();
+    if(res.status === 'success'){
+      location.assign('/admin');
+    }else{
+      phoneError.textContent = "Something's wrong. please try again letter";
+    }
+  }
+
+  
   form.addEventListener('submit', async (e)=>{
     e.preventDefault();
 
@@ -80,14 +98,18 @@
     phoneError.textContent = "";
     emailError.textContent = "";
 
-
+    const phone  = document.querySelector(`input[name=phone]`).value;
     const data = {
       firstname: document.querySelector(`input[name=firstname]`).value,
       lastname: document.querySelector(`input[name=lastname]`).value,
       username: document.querySelector(`input[name=username]`).value,
       email: document.querySelector(`input[name=email]`).value,
-      phone: document.querySelector(`input[name=phone]`).value
     }
+
+    if(phone !== ''){
+      data.phone = phone;
+    }
+    
     console.log(data);
     const response = await fetch('/admin/update', {
       method:'PATCH',

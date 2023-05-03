@@ -2,8 +2,8 @@
 
 <h1>Blog post</h1>
 <form>
+    <input type="file" name="file1" accept="image/*" />
     <div>
-
     <lable for="title">Title:
     </lable>
     <input type="text" name="title" />
@@ -22,18 +22,38 @@
         e.preventDefault();
         const title = form.title.value;
         const description = form.description.value;
-        const data = {title, description};
+        const img = form.file1.files[0];
+        // const data = {title, description};
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('blog_img', img);
+
+        // console.log(formData);
 
         const res = await fetch('/admin/blog', {
             method:'POST',
-            body: JSON.stringify(data),
-            headers: {'Content-Type':'application/json'}
+            body:formData,
         });
+
         const resp = await res.json();
-        console.log(resp);
+
         if(resp._id){
             location.assign('/admin/blogs')
         }
+        // console.log(resp);
+
+        // const res = await fetch('/admin/blog', {
+        //     method:'POST',
+        //     body: JSON.stringify(data),
+        //     headers: {'Content-Type':'application/json'}
+        // });
+        // const resp = await res.json();
+        // console.log(resp);
+        // if(resp._id){
+        //     location.assign('/admin/blogs')
+        // }
     })
 </script>
 

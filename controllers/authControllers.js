@@ -1,7 +1,6 @@
 const User = require("./../models/User");
 const Blog = require("../models/Blog");
-const errorHandler = require('./errorHandler');
-
+const errorHandler = require("./errorHandler");
 
 // const errorHandler = (err) => {
 //   // console.log(err);
@@ -10,7 +9,6 @@ const errorHandler = require('./errorHandler');
 //     title: "",
 //     description: "",
 //   };
-
 
 //   return errors;
 // };
@@ -23,17 +21,15 @@ module.exports.admin_get = async (req, res) => {
   const user = await User.findById(req.id);
   console.log(user);
   // res.cookie('jwt','token');
-  return res
-    .status(200)
-    .render("admin/index", {
-      firstname: user.firstname,
-      lastname: user.lastname,
-      username: user.username,
-      email: user.email,
-      phone: user.phone ? user.phone : "" ,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
-    });
+  return res.status(200).render("admin/index", {
+    firstname: user.firstname,
+    lastname: user.lastname,
+    username: user.username,
+    email: user.email,
+    phone: user.phone ? user.phone : "",
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  });
 };
 
 module.exports.admin_blog_get = (req, res) => {
@@ -43,13 +39,27 @@ module.exports.admin_blog_get = (req, res) => {
 module.exports.admin_blog_post = (req, res) => {
   // const data = req.body;
   const id = req.id;
-  Blog.create({ ...req.body, author_id: id })
+  console.log(req.file);
+  console.log(req.body);
+  const data = {
+    author_id: id,
+    title: req.body.title,
+    description: req.body.description
+  }
+
+  if(req.file){
+    data.image = `/assets/uploads/${req.file.filename}`
+  }
+
+  console.log(data);
+
+  Blog.create(data)
     .then((blog) => {
       res.json(blog);
     })
     .catch((err) => {
       const errors = errorHandler(err);
-      // console.log(err);0
+      console.log(err);
       res.json(errors);
     });
 };
@@ -64,54 +74,79 @@ module.exports.admin_blogs_get = async (req, res) => {
   }
 };
 
-//delete-all-users
-module.exports.delete_all_users = async (req, res) => {
-  try {
-    const users = await User.deleteMany({});
-    res.status(200).json(users);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ msg: err.message });
-  }
-};
 
-module.exports.profile_update = async (req, res )=>{
+module.exports.profile_update = async (req, res) => {
   const id = req.id;
   console.log(req.body);
-  try{
+  try {
     const user = await User.findById(id);
     const UpdateQueryKeys = Object.keys(req.body);
-    UpdateQueryKeys.forEach(key=>{
+    UpdateQueryKeys.forEach((key) => {
       user[key] = req.body[key];
     });
     const newUser = await user.save();
     console.log(newUser);
-    res.json({status:'success', newUser});
-  }catch(err){
+    res.json({ status: "success", newUser });
+  } catch (err) {
     const errors = errorHandler(err);
     console.log(err);
-    res.json({status:"failed", errors});
+    res.json({ status: "failed", errors });
   }
-}
+};
 
-module.exports.admin_manage = async (req, res) =>{
-  res.render('admin/manage');
-}
+module.exports.admin_manage = async (req, res) => {
+  res.render("admin/manage");
+};
 
-module.exports.update_password = async (req, res) =>{
+module.exports.update_password = async (req, res) => {
   const id = req.id;
   console.log(req.body);
-  try{
+  try {
     const user = await User.findById(id);
     user.password = req.body.password;
     const newUser = await user.save();
     // const user = await User.findByIdAndUpdate(id, req.body);
     console.log(newUser);
-    res.json({status:'success', user});
-  }catch(err){
+    res.json({ status: "success", user });
+  } catch (err) {
     const errors = errorHandler(err);
     console.log(err);
-    res.json({status:"failed", errors});
+    res.json({ status: "failed", errors });
+  }
+};
+
+module.exports.remove_phone = async (req, res) => {
+  const id = req.id;
+  try {
+    const user = await User.findByIdAndUpdate(id, { $unset: { phone: 1 } });
+    console.log(user);
+    res.json({ status: "success" });
+  } catch (err) {
+    console.log(err);
+    res.json({ status: "failed" });
+  }
+};
+
+//---------------------dev-modules------------------------------------------//
+//multer-test
+module.exports.multer_test = (req, res) =>{
+
+  console.log(req.file);
+  console.log(req.body.title);
+  // const data = 
+  console.log(JSON.stringify(req.body))
+  res.json(req.body);
+}
+
+//update all blogs image
+module.exports.update_all_blogs_img = async (req, res) =>{
+  try{
+    const blogs = await Blog.updateMany({}, {image: '/assets/uploads/blog_img.jpg'});
+    console.log(blogs);
+    res.json({blogs});
+  }catch(err){
+    console.log(err);
+    res.json({msg:'error occured'});
   }
 }
 
@@ -120,6 +155,17 @@ module.exports.delete_all_blogs = async (req, res) => {
   try {
     const blogs = await Blog.deleteMany({});
     res.status(200).json(blogs);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+//delete-all-users
+module.exports.delete_all_users = async (req, res) => {
+  try {
+    const users = await User.deleteMany({});
+    res.status(200).json(users);
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: err.message });

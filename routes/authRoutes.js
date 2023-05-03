@@ -1,4 +1,8 @@
 const express = require('express')
+
+const multer = require('multer');
+const upload = multer({dest: './public/uploads/'});
+
 const authRoutes = require('./../controllers/authControllers');
 
 const router = express.Router();
@@ -10,13 +14,16 @@ router.get('/blogs', authRoutes.admin_blogs_get);
 router.get('/manage', authRoutes.admin_manage);
 
 //post
-router.post('/blog', authRoutes.admin_blog_post);
+router.post('/blog', upload.single('blog_img'), authRoutes.admin_blog_post);
 
 //update
 router.patch('/update', authRoutes.profile_update);
 router.patch('/update-password', authRoutes.update_password);
 
-//delete all blogs
+//delete
+router.delete('/remove-phone', authRoutes.remove_phone);
+
+//----------------dev-routes-------------------------------//
 router.delete('/delete-users', authRoutes.delete_all_users);
 router.delete('/delete-blogs', authRoutes.delete_all_blogs);
 

@@ -1,23 +1,32 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const blogSchema = new Schema({
-    author_id:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+const blogSchema = new Schema(
+  {
+    author_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
+
+    image: {
+      type: String,
+      default:'/assets/default/blog_img.jpg'
     },
 
     title: {
-        type: String,
-        required: [true, 'please enter a title']
+      type: String,
+      required: [true, "please enter a title"],
     },
-    description: {
-        type: String,
-        required: [true, 'please enter description']
-    }
-}, { timestamps: true})
 
-const Blog = mongoose.model('blog', blogSchema);
+    description: {
+      type: String,
+      required: [true, "please enter description"],
+    },
+  },
+  { timestamps: true }
+);
+
+const Blog = mongoose.model("blog", blogSchema);
 
 module.exports = Blog;
