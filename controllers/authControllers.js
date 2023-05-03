@@ -33,6 +33,7 @@ module.exports.admin_get = async (req, res) => {
       lastname: user.lastname,
       username: user.username,
       email: user.email,
+      phone: user.phone ? user.phone : "" ,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
     });
@@ -76,6 +77,36 @@ module.exports.delete_all_users = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+
+module.exports.profile_update = async (req, res )=>{
+  const id = req.id;
+  console.log(req.body);
+  try{
+    const user = await User.findByIdAndUpdate(id, req.body);
+    console.log(user);
+    res.json({status:'success', user});
+  }catch(err){
+    console.log(err);
+    res.json({status:"failed"});
+  }
+}
+
+module.exports.admin_manage = async (req, res) =>{
+  res.render('admin/manage');
+}
+
+module.exports.update_password = async (req, res) =>{
+  const id = req.id;
+  console.log(req.body);
+  try{
+    const user = await User.findOneAndUpdate({_id:id}, req.body);
+    console.log(user);
+    res.json({status:'success', user});
+  }catch(err){
+    console.log(err);
+    res.json({status:"failed"});
+  }
+}
 
 //delete-all-blogs
 module.exports.delete_all_blogs = async (req, res) => {

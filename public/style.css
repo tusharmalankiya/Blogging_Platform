@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto&display=swap");
 @import url("./navbar.css");
 @import url("./blog_card.css");
+@import url("./full_blog.css");
+@import url("./profile.css");
 
 :root {
   --background-color: #54cbca;

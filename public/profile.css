@@ -1,0 +1,10 @@
+.profile_container{
+    margin:auto;
+    padding:20px;
+    border:1px solid black;
+    text-align: center;
+}
+
+.profile_field{
+    padding: 10px;
+}

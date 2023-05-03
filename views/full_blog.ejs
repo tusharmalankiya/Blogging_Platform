@@ -1,13 +1,17 @@
 <%- include('partials/header') %>
 
-<hr />
-<h1>Author Details: </h1>
-
-<hr />
-
-<h1>Blog title: <%= blog.title %> </h1>
-<h2>Blog Desc: <%= blog.description %> </h2>
-
-
+<div class="full_blog_container">
+  <div class="full_blog_header">
+    <img class="blog_img" src="/assets/blog_img.jpg" alt="BlogImage" />
+    <div class="blog">
+      <div class="blog_details">
+        <!-- <p><%= blog.email %></p> -->
+        <p class="blog_date"><%= blog.updatedAt.toLocaleString() %></p>
+      </div>
+      <h2 class="blog_title"><%= blog.title %></h2>
+    </div>
+  </div>
+  <p class="blog_description"><%= blog.description %></p>
+</div>
 
 <%- include('partials/footer') %>

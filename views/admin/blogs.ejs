@@ -1,16 +1,43 @@
 <%- include('./../partials/header') %>
-<h1>Admin Blogs</h1>
+<h1>Your Blogs</h1>
 <hr />
 <br />
 <br />
 <%  if(blogs.length > 0 ){ %>
 
-<% blogs.forEach((blog)=>{ %>
-<h2><%= blog.title %></h2>
-<p><%= blog.description %></p>
-<br />
-<br />
-<% }) %> <%- include('./../partials/footer') %>
+    <% blogs.forEach((blog) =>{ %>
+        <div class="blog_card_container">
+          <img class="blog_img" src="/assets/blog_img.jpg" alt="BlogImage" />
+          <div class="blog">
+            <div>
+              <div class="blog_details">
+                <!-- <p><%= blog.email %></p> -->
+                <p class="blog_date"><%= blog.updatedAt.toLocaleString() %></p>
+              </div>
+              <div>
+                <h2 class="blog_title"><%= blog.title %></h2>
+                <!-- </div> -->
+                <!-- <div> -->
+                <p class="blog_description">
+                  <%= blog.description.substring(0, 200) + '...' %>
+                </p>
+              </div>
+            </div>
+            <div class="blog_card_bottom">
+              <div class="more">
+                <a href="/blogs/<%= blog._id %>">Continue Reading</a>
+              </div>
+              <!-- <div class="author">
+                <a href="/blogs/author/<%= blog.author_id %>">
+                  <%= blog.firstname + ' ' + blog.lastname %></a
+                >
+              </div> -->
+            </div>
+          </div>
+        </div>
+        
+<% }) %>
 <% }else{ %>
 <h2>You don't have any blogs</h2>
 <% } %>
+<%- include('./../partials/footer') %>

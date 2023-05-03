@@ -1,21 +1,21 @@
-<%- include('partials/header') %> <% blogs.forEach((blog) =>{ %>
+<%- include('partials/header') %> 
+<% blogs.forEach((blog) =>{ %>
 <div class="blog_card_container">
   <img class="blog_img" src="/assets/blog_img.jpg" alt="BlogImage" />
   <div class="blog">
     <div>
-    <div class="blog_details">
-      <!-- <p><%= blog.email %></p> -->
-      <p class="blog_date"><%= blog.updatedAt.toLocaleString() %></p>
-    </div>
-    <div>
-      <h2 class="blog_title"><%= blog.title %></h2>
-      <!-- </div> -->
-      <!-- <div> -->
-      <p class="blog_description">
-        <%= blog.description.substring(0, 200) + '...' %>
-      </p>
-      
-    </div>
+      <div class="blog_details">
+        <!-- <p><%= blog.email %></p> -->
+        <p class="blog_date"><%= blog.updatedAt.toLocaleString() %></p>
+      </div>
+      <div>
+        <h2 class="blog_title"><%= blog.title %></h2>
+        <!-- </div> -->
+        <!-- <div> -->
+        <p class="blog_description">
+          <%= blog.description.substring(0, 200) + '...' %>
+        </p>
+      </div>
     </div>
     <div class="blog_card_bottom">
       <div class="more">
