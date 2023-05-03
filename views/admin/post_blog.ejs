@@ -2,59 +2,53 @@
 
 <h1>Blog post</h1>
 <form>
-    <input type="file" name="file1" accept="image/*" />
-    <div>
-    <lable for="title">Title:
-    </lable>
+  <input type="file" name="file1" accept="image/*" />
+  <div>
+    <lable for="title">Title: </lable>
     <input type="text" name="title" />
-</div>
+  </div>
 
-    <label for="description">Description:</label>
-    <div>
-    <textarea name="description" rows="10" cols="30"></textarea> 
-    </div>
-    <button type="submit">Submit</button>
+  <label for="description">Description:</label>
+  <div>
+    <textarea name="description" rows="10" cols="30"></textarea>
+  </div>
+  <button type="submit">Submit</button>
 </form>
 
 <script>
-    const form = document.querySelector('form');
-    form.addEventListener('submit', async (e) =>{
-        e.preventDefault();
-        const title = form.title.value;
-        const description = form.description.value;
-        const img = form.file1.files[0];
-        // const data = {title, description};
+  const form = document.querySelector("form");
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('blog_img', img);
+  const submitButton = document.querySelector("button[type=submit]");
 
-        // console.log(formData);
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        const res = await fetch('/admin/blog', {
-            method:'POST',
-            body:formData,
-        });
+    submitButton.disabled = true;
+    submitButton.textContent = "Loading.....";
 
-        const resp = await res.json();
+    const title = form.title.value;
+    const description = form.description.value;
+    const img = form.file1.files[0];
 
-        if(resp._id){
-            location.assign('/admin/blogs')
-        }
-        // console.log(resp);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("blog_img", img);
+    try {
+      const res = await fetch("/admin/blog", {
+        method: "POST",
+        body: formData,
+      });
 
-        // const res = await fetch('/admin/blog', {
-        //     method:'POST',
-        //     body: JSON.stringify(data),
-        //     headers: {'Content-Type':'application/json'}
-        // });
-        // const resp = await res.json();
-        // console.log(resp);
-        // if(resp._id){
-        //     location.assign('/admin/blogs')
-        // }
-    })
+      const resp = await res.json();
+
+      if (resp._id) {
+        location.assign("/admin/blogs");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  });
 </script>
 
 <%- include('./../partials/footer') %>

@@ -27,11 +27,9 @@
               <div class="more">
                 <a href="/blogs/<%= blog._id %>">Continue Reading</a>
               </div>
-              <!-- <div class="author">
-                <a href="/blogs/author/<%= blog.author_id %>">
-                  <%= blog.firstname + ' ' + blog.lastname %></a
-                >
-              </div> -->
+              <div class="more" onclick="edit_blog('<%= blog._id %>')">
+                Edit
+              </div>
             </div>
           </div>
         </div>
@@ -40,4 +38,11 @@
 <% }else{ %>
 <h2>You don't have any blogs</h2>
 <% } %>
+
+
+<script>
+const edit_blog = (id) =>{
+  console.log(id);
+}
+</script>
 <%- include('./../partials/footer') %>
