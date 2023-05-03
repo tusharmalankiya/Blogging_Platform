@@ -3,32 +3,39 @@
 <h1>Change Password</h1>
 
 <form id="password_change">
-    <input name="password" type="password" />
-<button>submit</button>
+  <input name="password" type="password" />
+  <h1 class="password_changed"></h1>
+  <div class="password error"></div>
+  <button>submit</button>
 </form>
 
 <script>
-const form = document.getElementById('password_change');
-form.addEventListener('submit', async (e)=>{
+  const form = document.getElementById("password_change");
+  const passwordError = document.querySelector(".password.error");
+  const passwordChanged = document.querySelector('.password_changed');
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    passwordError.textContent = "";
+    passwordChanged.textContent = "";
     const data = {
-        password: form.password.value
-    }
+      password: form.password.value,
+    };
 
-    const response = await fetch('/admin/update-password', {
-        method: 'PATCH',
-        body: JSON.stringify(data),
-        headers:{'Content-Type':'application/json'}
+    const response = await fetch("/admin/update-password", {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
     });
     const res = await response.json();
-    if(res.status === 'success'){
-        console.log('changes');
-        console.log(res.user);
-    }else{
-        console.log('failed');
+    if (res.status === "success") {
+        passwordChanged.textContent = 'Password Changed Successfully';
+    } else {
+      console.log("failed");
+      if (res.errors.password) {
+        passwordError.textContent = res.errors.password;
+      }
     }
-
-})
+  });
 </script>
 
 <%- include('./../partials/footer') %>

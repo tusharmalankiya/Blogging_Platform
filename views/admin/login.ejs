@@ -4,9 +4,11 @@
 <form>
   <lable for="email">Email: </lable>
   <input type="text" name="email" class="email" />
+  <div class="login_email_error"></div>
   <label for="password">Password: </label>
   <input type="password" name="password" />
   <button type="submit">Login</button>
+  <div class="login_password_error"></div>
 </form>
 
 <br />
@@ -15,10 +17,14 @@
 
 <script>
   const form = document.querySelector("form");
+  const emailError = document.querySelector(".login_email_error");
+  const passwordError = document.querySelector(".login_password_error");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const email = form.email.value;
     const password = form.password.value;
+    emailError.textContent = "";
+    passwordError.textContent = "";
 
     const data = { email, password };
 
@@ -28,12 +34,19 @@
       headers: {
         "Content-Type": "application/json",
       },
-    }).then( async (res) => {
-        const response = await res.json();
-        if(response.user){
-            location.assign('/admin');
-            localStorage.setItem('login','true');
+    }).then(async (res) => {
+      const response = await res.json();
+      if (response.user) {
+        location.assign("/");
+        localStorage.setItem("login", "true");
+      } else {
+        if (response.errors.email) {
+          emailError.textContent = response.errors.email;
         }
+        if (response.errors.password) {
+          emailError.textContent = response.errors.password;
+        }
+      }
     });
 
     console.log("form submitted");

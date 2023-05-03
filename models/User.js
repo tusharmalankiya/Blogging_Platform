@@ -54,21 +54,22 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function (next) {
+  console.log('into pre save')
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
   // console.log(this);
   next();
 });
 
-userSchema.pre("findOneAndUpdate", async function (next){
-  console.log('in the pre');
-  // this.options.runValidators  = true;
-  // console.log(this)
-  const salt = await bcrypt.genSalt();
-  this._update.password = await bcrypt.hash(this._update.password, salt);
-  console.log(this._update.password);
-  next();
-})
+// userSchema.pre("findOneAndUpdate", async function (next){
+//   console.log('in the pre');
+//   // this.options.runValidators  = true;
+//   // console.log(this)
+//   const salt = await bcrypt.genSalt();
+//   this._update.password = await bcrypt.hash(this._update.password, salt);
+//   console.log(this._update.password);
+//   next();
+// })
 
 userSchema.statics.login = async function (email, password) {
   const user = await this.findOne({ email });

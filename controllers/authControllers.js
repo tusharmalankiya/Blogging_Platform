@@ -1,22 +1,19 @@
 const User = require("./../models/User");
 const Blog = require("../models/Blog");
+const errorHandler = require('./errorHandler');
 
-const errorHandler = (err) => {
-  // console.log(err);
-  // console.log(err.message);
-  const errors = {
-    title: "",
-    description: "",
-  };
 
-  if (err.message.includes("blog validation failed")) {
-    Object.values(err.errors).forEach(({ properties }) => {
-      errors[properties.path] = properties.message;
-    });
-  }
+// const errorHandler = (err) => {
+//   // console.log(err);
+//   // console.log(err.message);
+//   const errors = {
+//     title: "",
+//     description: "",
+//   };
 
-  return errors;
-};
+
+//   return errors;
+// };
 
 module.exports.admin_get = async (req, res) => {
   // const token = req.cookies.token;
@@ -82,12 +79,18 @@ module.exports.profile_update = async (req, res )=>{
   const id = req.id;
   console.log(req.body);
   try{
-    const user = await User.findByIdAndUpdate(id, req.body);
-    console.log(user);
-    res.json({status:'success', user});
+    const user = await User.findById(id);
+    const UpdateQueryKeys = Object.keys(req.body);
+    UpdateQueryKeys.forEach(key=>{
+      user[key] = req.body[key];
+    });
+    const newUser = await user.save();
+    console.log(newUser);
+    res.json({status:'success', newUser});
   }catch(err){
+    const errors = errorHandler(err);
     console.log(err);
-    res.json({status:"failed"});
+    res.json({status:"failed", errors});
   }
 }
 
@@ -99,12 +102,16 @@ module.exports.update_password = async (req, res) =>{
   const id = req.id;
   console.log(req.body);
   try{
-    const user = await User.findOneAndUpdate({_id:id}, req.body);
-    console.log(user);
+    const user = await User.findById(id);
+    user.password = req.body.password;
+    const newUser = await user.save();
+    // const user = await User.findByIdAndUpdate(id, req.body);
+    console.log(newUser);
     res.json({status:'success', user});
   }catch(err){
+    const errors = errorHandler(err);
     console.log(err);
-    res.json({status:"failed"});
+    res.json({status:"failed", errors});
   }
 }
 

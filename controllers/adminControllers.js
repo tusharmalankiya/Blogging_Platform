@@ -1,51 +1,9 @@
-const { model } = require("mongoose");
+// const { model } = require("mongoose");
 const User = require("./../models/User");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
-
-const errorHandler = (err) =>{
-  console.log(err.message);
-  const errors = {
-    firstname:'',
-    lastname: '',
-    username: '',
-    phone: '',
-    email: '',
-    password: ''
-  }
-  if(err.message === 'incorrect email'){
-    errors.email = err.message;
-  }
-
-  if(err.message === 'incorrect password'){
-    errors.password = err.message;
-  }
-
-
-  if(err.code === 11000){
-    // console.log(err.code)
-    console.log(err.keyValue);
-    if(err.keyValue.email){
-    errors.email = 'email is already exists';
-    }
-    if(err.keyValue.username){
-      errors.username = 'username is already exists';
-    }
-    if(err.keyValue.phone){
-      errors.phone = "phone numer is already exists";
-    }
-  }
-
-  if(err.message.includes('user validation failed')){
-    Object.values(err.errors).forEach(({properties})=>{
-      errors[properties.path] = properties.message;
-    })
-  }
-
-  return errors;
-}
-
+const errorHandler = require('./errorHandler');
+// module.exports = errorHandler;
 //generate jwt token
 const maxAge = Number(process.env.TOKEN_AGE);
 const createToken = (id) => {
@@ -96,7 +54,7 @@ module.exports.admin_login_post = async (req, res) => {
     res.status(200).json({ user: user._id });
   } catch (err) {
     const errors = errorHandler(err);
-    return res.status(401).json(errors);
+    return res.status(401).json({errors});
   }
 };
 

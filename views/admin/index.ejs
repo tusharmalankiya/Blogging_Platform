@@ -10,29 +10,34 @@
       <strong>First Name : </strong
       ><input type="text" name="firstname" value="<%= firstname %>" disabled />
       <button id="firstname" type="button" onclick="unlock(this.id)">Edit</button>
+      <div class="firstname error"></div>
     </p>
     <p class="profile_field">
       <strong>Last Name : </strong
       ><input type="text" name="lastname" value="<%= lastname %>" disabled />
       <button id="lastname" type="button" onclick="unlock(this.id)">Edit</button>
+      <div class="lastname error"></div>
 
     </p>
     <p class="profile_field">
       <strong>Username : </strong
       ><input type="text" name="username" value="<%= username %>" disabled />
       <button id="username" type="button" onclick="unlock(this.id)">Edit</button>
+      <div class="username error"></div>
 
     </p>
     <p class="profile_field">
       <strong>Phone : </strong
       ><input type="text" name="phone" value="<%= phone %>" disabled />
       <button id="phone" type="button" onclick="unlock(this.id)">Edit</button>
+      <div class="phone error"></div>
 
     </p>
     <p class="profile_field">
       <strong>Email :</strong
       ><input type="text" name="email" value="<%= email %>" disabled />
       <button id="email" type="button" onclick="unlock(this.id)">Edit</button>
+      <div class="email error"></div>
 
     </p>
     <p class="profile_field">
@@ -61,8 +66,21 @@
   };
 
   const form = document.getElementById('profile_update_form');
+  const firstnameError = document.querySelector('.firstname.error');
+  const usernameError = document.querySelector('.username.error');
+  const emailError = document.querySelector('.email.error');
+  const lastnameError = document.querySelector('.lastname.error');
+  const phoneError = document.querySelector('.phone.error');
   form.addEventListener('submit', async (e)=>{
     e.preventDefault();
+
+    firstnameError.textContent = "";
+    lastnameError.textContent = "";
+    usernameError.textContent = "";
+    phoneError.textContent = "";
+    emailError.textContent = "";
+
+
     const data = {
       firstname: document.querySelector(`input[name=firstname]`).value,
       lastname: document.querySelector(`input[name=lastname]`).value,
@@ -83,6 +101,12 @@
       console.log("data updated");
       location.assign('/admin');
     }else{
+      if(res.errors){
+        const keys = Object.keys(res.errors);
+        keys.forEach((key)=>{
+          document.querySelector(`.${key}.error`).textContent = res.errors[key];
+        })
+      }
       console.log("data updation failed");
     }
   })
