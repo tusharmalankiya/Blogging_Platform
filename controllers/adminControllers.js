@@ -16,7 +16,7 @@ const createToken = (id) => {
 //get requests controllers
 module.exports.admin_login_get = (req, res) => {
   const id = req.id;
-  console.log(req.id);
+  // console.log(req.id);
   if (id) {
     return res.redirect("/admin");
   }

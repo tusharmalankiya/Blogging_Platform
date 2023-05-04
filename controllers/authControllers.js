@@ -19,7 +19,7 @@ module.exports.admin_get = async (req, res) => {
   //   return res.status(200).redirect("/admin/login");
   // }
   const user = await User.findById(req.id);
-  console.log(user);
+  // console.log(user);
   // res.cookie('jwt','token');
   return res.status(200).render("admin/index", {
     firstname: user.firstname,
@@ -39,19 +39,19 @@ module.exports.admin_blog_get = (req, res) => {
 module.exports.admin_blog_post = (req, res) => {
   // const data = req.body;
   const id = req.id;
-  console.log(req.file);
-  console.log(req.body);
+  // console.log(req.file);
+  // console.log(req.body);
   const data = {
     author_id: id,
     title: req.body.title,
-    description: req.body.description
+    description: req.body.description,
+  };
+
+  if (req.file) {
+    data.image = `/assets/uploads/${req.file.filename}`;
   }
 
-  if(req.file){
-    data.image = `/assets/uploads/${req.file.filename}`
-  }
-
-  console.log(data);
+  // console.log(data);
 
   Blog.create(data)
     .then((blog) => {
@@ -67,17 +67,16 @@ module.exports.admin_blog_post = (req, res) => {
 module.exports.admin_blogs_get = async (req, res) => {
   const id = req.id;
   try {
-    const blogs = await Blog.find({ author_id: id }).sort({ createdAt: -1 });
+    const blogs = await Blog.find({ author_id: id }).sort({ updatedAt: -1 });
     res.status(200).render("admin/blogs", { blogs });
   } catch (err) {
     console.log(err);
   }
 };
 
-
 module.exports.profile_update = async (req, res) => {
   const id = req.id;
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const user = await User.findById(id);
     const UpdateQueryKeys = Object.keys(req.body);
@@ -85,7 +84,7 @@ module.exports.profile_update = async (req, res) => {
       user[key] = req.body[key];
     });
     const newUser = await user.save();
-    console.log(newUser);
+    // console.log(newUser);
     res.json({ status: "success", newUser });
   } catch (err) {
     const errors = errorHandler(err);
@@ -100,13 +99,13 @@ module.exports.admin_manage = async (req, res) => {
 
 module.exports.update_password = async (req, res) => {
   const id = req.id;
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const user = await User.findById(id);
     user.password = req.body.password;
     const newUser = await user.save();
     // const user = await User.findByIdAndUpdate(id, req.body);
-    console.log(newUser);
+    // console.log(newUser);
     res.json({ status: "success", user });
   } catch (err) {
     const errors = errorHandler(err);
@@ -119,7 +118,7 @@ module.exports.remove_phone = async (req, res) => {
   const id = req.id;
   try {
     const user = await User.findByIdAndUpdate(id, { $unset: { phone: 1 } });
-    console.log(user);
+    // console.log(user);
     res.json({ status: "success" });
   } catch (err) {
     console.log(err);
@@ -127,28 +126,72 @@ module.exports.remove_phone = async (req, res) => {
   }
 };
 
+//edit blog
+module.exports.edit_blog_get = async (req, res) => {
+  const blog_id = req.params.blog_id;
+  try {
+    const blog = await Blog.findById(blog_id);
+    if(!blog){
+      return res.render('404');
+    }
+    // const blog = JSON.stringify(blog_data);
+    console.log(blog);
+    res.render("admin/edit_blog", { blog });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.edit_blog = async (req, res) => {
+  const blog_id = req.params.blog_id;
+  try {
+    const blog = await Blog.findByIdAndUpdate(blog_id, req.body);
+    console.log(blog);
+    res.json({ status: "success", blog });
+  } catch (err) {
+    res.json({ status: "error occured" });
+    console.log(err);
+  }
+};
+
+//delete blog
+
+module.exports.delete_blog = async (req, res) => {
+  const blog_id = req.params.blog_id;
+  try {
+    const blog = await Blog.findByIdAndDelete(blog_id);
+    console.log(blog);
+    res.json({ status: "success", blog });
+  } catch (err) {
+    res.json({ status: "error occured" });
+    console.log(err);
+  }
+};
+
+
 //---------------------dev-modules------------------------------------------//
 //multer-test
-module.exports.multer_test = (req, res) =>{
-
+module.exports.multer_test = (req, res) => {
   console.log(req.file);
   console.log(req.body.title);
-  // const data = 
-  console.log(JSON.stringify(req.body))
+  console.log(JSON.stringify(req.body));
   res.json(req.body);
-}
+};
 
 //update all blogs image
-module.exports.update_all_blogs_img = async (req, res) =>{
-  try{
-    const blogs = await Blog.updateMany({}, {image: '/assets/uploads/blog_img.jpg'});
+module.exports.update_all_blogs_img = async (req, res) => {
+  try {
+    const blogs = await Blog.updateMany(
+      {},
+      { image: "/assets/uploads/blog_img.jpg" }
+    );
     console.log(blogs);
-    res.json({blogs});
-  }catch(err){
+    res.json({ blogs });
+  } catch (err) {
     console.log(err);
-    res.json({msg:'error occured'});
+    res.json({ msg: "error occured" });
   }
-}
+};
 
 //delete-all-blogs
 module.exports.delete_all_blogs = async (req, res) => {

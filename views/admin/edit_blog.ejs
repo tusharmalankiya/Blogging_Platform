@@ -1,0 +1,89 @@
+<%- include('./../partials/header') %>
+
+<div class="full_blog_container">
+  <div class="full_blog_header">
+    <img class="blog_img" src="<%= blog.image %>" alt="BlogImage" />
+    <div class="blog">
+      <div class="blog_details">
+        <!-- <p><%= blog.email %></p> -->
+        <p class="blog_date"><%= blog.updatedAt.toLocaleString() %></p>
+      </div>
+      <div>
+        <h2 contenteditable="false" class="blog_title"><%= blog.title %></h2>
+        <button onclick="edit_title()">edit</button>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p contenteditable="false" class="blog_description">
+      <%= blog.description %>
+    </p>
+    <button onclick="edit_desc()">edit</button>
+  </div>
+  <div>
+    <button onclick="edited_blog_submit()">Submit</button>
+  </div>
+  <div>
+    <button onclick="delete_blog()">Delete</button>
+  </div>
+</div>
+
+<script>
+  // console.log('<%= blog._id %>');
+  const title = document.querySelector(`.blog_title`);
+  const description = document.querySelector(`.blog_description`);
+  // console.log(title);
+  const edit_title = () => {
+    title.setAttribute("contenteditable", "true");
+    title.focus();
+  };
+
+  const edit_desc = () => {
+    description.setAttribute("contenteditable", "true");
+    description.focus();
+  };
+
+  const edited_blog_submit = () => {
+    data = {
+      title: title.textContent,
+      description: description.textContent,
+    };
+    console.log(data);
+
+    fetch("/admin/edit-blog/<%= blog._id %>", {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (resp) => {
+        const res = await resp.json();
+        if (res.status === "success") {
+          console.log(res.blog);
+          location.assign("/admin/blogs");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const delete_blog = () => {
+    fetch("/admin/delete-blog/<%= blog._id %>", {
+      method: "DELETE",
+    })
+      .then(async (resp) => {
+        const res = await resp.json();
+        if (res.status === "success") {
+          console.log(res.blog);
+          location.assign("/admin/blogs");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+</script>
+
+<%- include('./../partials/footer') %>

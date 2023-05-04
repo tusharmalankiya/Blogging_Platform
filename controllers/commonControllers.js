@@ -21,7 +21,7 @@ module.exports.blogs_get = async (req, res) => {
             dataObj["author_id"] = obj.author_id["_id"];
           }
         });
-        console.log(dataObj);
+        // console.log(dataObj);
         data.push(dataObj);
       });
       res.status(200).render("index", { blogs: data });
@@ -46,6 +46,9 @@ module.exports.blog_get = async (req, res) => {
   const blog_id = req.params.blog_id;
   try{
     const blog = await Blog.findById(blog_id);
+    if(!blog){
+      return res.render('404');
+    }
     res.render('full_blog', {blog});
   }catch(err){
     console.log(err);
@@ -56,7 +59,7 @@ module.exports.author_blogs = (req, res) => {
   const author_id = req.params.author_id;
   Blog.find({ author_id })
     .then((blogs) => {
-      console.log(blogs);
+      // console.log(blogs);
       // res.json(blogs);
       res.render("author_blogs", { blogs });
     })
