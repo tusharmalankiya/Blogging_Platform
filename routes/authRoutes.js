@@ -21,6 +21,8 @@ router.patch('/update', authRoutes.profile_update);
 router.patch('/update-password', authRoutes.update_password);
 
 router.patch('/edit-blog/:blog_id', authRoutes.edit_blog);
+router.patch('/edit-blog-image/:blog_id',upload.single('img'), authRoutes.edit_blog_image);
+
 
 //delete
 router.delete('/remove-phone', authRoutes.remove_phone);

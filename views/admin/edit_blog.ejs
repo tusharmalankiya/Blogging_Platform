@@ -3,6 +3,10 @@
 <div class="full_blog_container">
   <div class="full_blog_header">
     <img class="blog_img" src="<%= blog.image %>" alt="BlogImage" />
+    <form id="edit-image">
+      <input type="file" name="file1" accept="image/*" />
+      <button type="submit">Upload</button>
+    </form>
     <div class="blog">
       <div class="blog_details">
         <!-- <p><%= blog.email %></p> -->
@@ -33,6 +37,50 @@
   const title = document.querySelector(`.blog_title`);
   const description = document.querySelector(`.blog_description`);
   // console.log(title);
+  const form = document.querySelector("#edit-image");
+  const upload_button = form.querySelector("button[type=submit]");
+  const image = document.querySelector(".blog_img");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    upload_button.disabled = true;
+    upload_button.textContent = "Loading.....";
+    
+    const img = form.file1.files[0];
+
+    const formData = new FormData();
+    formData.append("img", img);
+
+// Iterate over the FormData entries and log them
+// formData.forEach((value, key) => {
+//   console.log(`${key}:`, value);
+// });
+    try {
+      const res = await fetch("/admin/edit-blog-image/<%= blog._id %>", {
+        method: "PATCH",
+        body: formData,
+      });
+
+      const resp = await res.json();
+      console.log(resp);
+
+      // Update the image src
+      image.src = `${resp.image}?` + new Date().getTime();
+      
+      // if (resp._id) {
+        // location.assign("/admin/blogs");
+      // }
+      upload_button.textContent = "Upload";
+      upload_button.disabled = false;
+
+
+    } catch (err) {
+      console.log(err);
+    }
+
+  });
+
   const edit_title = () => {
     title.setAttribute("contenteditable", "true");
     title.focus();

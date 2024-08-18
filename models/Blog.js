@@ -16,7 +16,6 @@ const blogSchema = new Schema(
 
     imageFilepath: {
       type: String,
-      required: ['imageFilepath is required'],
     },
 
     title: {

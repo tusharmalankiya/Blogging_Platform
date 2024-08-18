@@ -168,6 +168,29 @@ module.exports.edit_blog = async (req, res) => {
   }
 };
 
+module.exports.edit_blog_image = async (req, res) => {
+  console.log("*********************");
+  const blog_id = req.params.blog_id;
+  data = {
+    imageFilepath : req.file.path,
+    image: `/assets/uploads/${req.file.filename}`
+  }
+
+  try {
+    const old_blog = await Blog.findById(blog_id);
+    deleteFile(old_blog.imageFilepath);
+
+    const blog = await Blog.findByIdAndUpdate(blog_id, data, {new: true});
+    // console.log(blog);
+    res.setHeader('Cache-Control', 'max-age=0, must-revalidate');
+
+    res.json({ status: "success", image: blog.image });
+  } catch (err) {
+    res.json({ status: "error occured" });
+    console.log(err);
+  }
+};
+
 //delete blog
 
 module.exports.delete_blog = async (req, res) => {
@@ -175,7 +198,9 @@ module.exports.delete_blog = async (req, res) => {
   try {
     const blog = await Blog.findByIdAndDelete(blog_id);
     console.log(blog);
-    deleteFile(blog.imageFilepath);
+    if(blog.imageFilepath){
+      deleteFile(blog.imageFilepath);
+    }
     res.json({ status: "success", blog });
   } catch (err) {
     res.json({ status: "error occured" });
@@ -211,7 +236,21 @@ module.exports.update_all_blogs_img = async (req, res) => {
 //delete-all-blogs
 module.exports.delete_all_blogs = async (req, res) => {
   try {
+    const all_blogs = await Blog.find();
+    console.log(all_blogs);
     const blogs = await Blog.deleteMany({});
+    console.log(blogs);
+    
+    // // Iterate over each filepath and delete it
+    for (const blog of all_blogs) {
+      // const filePath = path.join(directoryPath, file);
+      if(blog.imageFilepath){
+        await fs.unlink(blog.imageFilepath);
+        console.log(`Deleted file: ${blog.imageFilepath}`);
+      }
+    }
+    console.log('All files deleted successfully.');
+
     res.status(200).json(blogs);
   } catch (err) {
     console.log(err);
