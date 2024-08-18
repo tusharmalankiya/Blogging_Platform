@@ -1,4 +1,4 @@
-# Blogging Website
+# Blogging Platform
 
 ## Overview
 
