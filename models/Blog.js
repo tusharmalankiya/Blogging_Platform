@@ -14,6 +14,11 @@ const blogSchema = new Schema(
       default:'/assets/default/blog_img.jpg'
     },
 
+    imageFilepath: {
+      type: String,
+      required: ['imageFilepath is required'],
+    },
+
     title: {
       type: String,
       required: [true, "please enter a title"],

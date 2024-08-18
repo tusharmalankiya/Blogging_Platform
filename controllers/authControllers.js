@@ -60,8 +60,9 @@ module.exports.admin_blog_post = (req, res) => {
   };
 
   if (req.file) {
-    //console.log(req.file);
+    console.log(req.file);
     data.image = `/assets/uploads/${req.file.filename}`;
+    data.imageFilepath = req.file.path;
   }
 
   // console.log(data);
@@ -174,7 +175,7 @@ module.exports.delete_blog = async (req, res) => {
   try {
     const blog = await Blog.findByIdAndDelete(blog_id);
     console.log(blog);
-    
+    deleteFile(blog.imageFilepath);
     res.json({ status: "success", blog });
   } catch (err) {
     res.json({ status: "error occured" });
