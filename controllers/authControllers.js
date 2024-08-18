@@ -1,6 +1,16 @@
 const User = require("./../models/User");
 const Blog = require("../models/Blog");
 const errorHandler = require("./errorHandler");
+const fs = require('fs').promises;
+
+async function deleteFile(path) {
+  try {
+    await fs.unlink(path);
+    console.log(`File ${path} deleted successfully`);
+  } catch (err) {
+    console.error('Error deleting file:', err);
+  }
+}
 
 // const errorHandler = (err) => {
 //   // console.log(err);
@@ -12,6 +22,8 @@ const errorHandler = require("./errorHandler");
 
 //   return errors;
 // };
+
+
 
 module.exports.admin_get = async (req, res) => {
   // const token = req.cookies.token;
@@ -48,6 +60,7 @@ module.exports.admin_blog_post = (req, res) => {
   };
 
   if (req.file) {
+    //console.log(req.file);
     data.image = `/assets/uploads/${req.file.filename}`;
   }
 
@@ -161,6 +174,7 @@ module.exports.delete_blog = async (req, res) => {
   try {
     const blog = await Blog.findByIdAndDelete(blog_id);
     console.log(blog);
+    
     res.json({ status: "success", blog });
   } catch (err) {
     res.json({ status: "error occured" });

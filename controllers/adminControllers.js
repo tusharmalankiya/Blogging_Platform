@@ -53,6 +53,7 @@ module.exports.admin_login_post = async (req, res) => {
     });
     res.status(200).json({ user: user._id });
   } catch (err) {
+    console.log(err);
     const errors = errorHandler(err);
     return res.status(401).json({errors});
   }
