@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("./../models/User");
 require('dotenv').config();
 
 module.exports.auth = (req, res, next) => {
@@ -9,9 +10,19 @@ module.exports.auth = (req, res, next) => {
         console.log(err);
         res.redirect("/admin/login");
       } else {
-        req.id = decoded.id;
+        User.findById(decoded.id)
+          .then(user => {
+            console.log(user);
+            if (user) {
+              req.id = decoded.id;
+              next();
+            } else {
+              res.redirect("/admin/login");
+            }
+          }).catch(err => {
+            console.log(err);
+          })
         // console.log(decoded);
-        next();
       }
     });
   } else {

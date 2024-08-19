@@ -236,6 +236,23 @@ module.exports.delete_comment = async (req, res) => {
   }
 };
 
+
+module.exports.delete_account = async (req, res) =>{
+  const user_id = req.id;
+  try{
+    const blogs = await Blog.deleteMany({author_id: user_id});
+    console.log(blogs);
+    const comments = await Comment.deleteMany({user_id});
+    console.log(comments);
+    const user = await User.findByIdAndDelete(user_id);
+    console.log(user);
+    res.json({status: "success"});
+    
+  }catch(err){
+    console.log(err);
+  }
+}
+
 //---------------------dev-modules------------------------------------------//
 //multer-test
 module.exports.multer_test = (req, res) => {

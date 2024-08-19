@@ -29,6 +29,7 @@ router.patch('/edit-blog/:blog_id',upload.single('img'), authRoutes.edit_blog);
 router.delete('/remove-phone', authRoutes.remove_phone);
 router.delete('/delete-blog/:blog_id', authRoutes.delete_blog);
 router.delete('/delete-comment',authRoutes.delete_comment);
+router.delete('/delete-account', authRoutes.delete_account);
 
 
 //----------------dev-routes-------------------------------//
