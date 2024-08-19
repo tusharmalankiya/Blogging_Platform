@@ -240,8 +240,14 @@ module.exports.delete_comment = async (req, res) => {
 module.exports.delete_account = async (req, res) =>{
   const user_id = req.id;
   try{
-    const blogs = await Blog.deleteMany({author_id: user_id});
-    console.log(blogs);
+    const blogs = await Blog.find({author_id: user_id});
+    blogs.forEach(blog=>{
+      if(blog.imageFilepath){
+        deleteFile(blog.imageFilepath);
+      }
+    });
+    const deleted_blogs = await Blog.deleteMany({author_id: user_id});
+    console.log(deleted_blogs);
     const comments = await Comment.deleteMany({user_id});
     console.log(comments);
     const user = await User.findByIdAndDelete(user_id);

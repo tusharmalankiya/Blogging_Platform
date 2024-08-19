@@ -50,7 +50,7 @@
           const res = await resp.json();
           if (res.status == "success") {
             localStorage.clear();
-            location.assign("/admin/blogs");
+            location.assign("/admin/logout");
           }
         })
         .catch(err => {

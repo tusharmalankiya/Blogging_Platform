@@ -31,7 +31,7 @@ app.get("*", (req, res)=>{
 mongoose
   .connect(process.env.MONGO_URI)
   .then((result) => {
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT, '0.0.0.0', () => {
       console.log(
         `connected to database and listening on port ${process.env.PORT}`
       );
