@@ -9,7 +9,7 @@ This is a fully functional blogging platform built with Node.js, Express, MongoD
 - **User Authentication**: Sign up, log in, and manage user sessions.
 - **CRUD Operations**: Create, read, update, and delete blog posts.
 - **Responsive Design**: Mobile-friendly and responsive layout.
-<!-- - **Comments**: Users can comment on blog posts. -->
+- **Comments**: Users can add and delete comments on blog posts.
 
 ## Technologies Used
 
@@ -59,4 +59,4 @@ Start the application using:
 - **Create a Post**: Navigate to the create post page and fill out the form.
 - **View Posts**: Browse the list of blog posts and read individual posts.
 - **Edit / Delete Posts**: Edit or delete your own posts from the management page.
-<!-- Comment: Add comments to blog posts. -->
+- **Comment**: Add and Delete comments to blog posts.
