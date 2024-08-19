@@ -16,6 +16,7 @@ router.get('/edit-blog/:blog_id', authRoutes.edit_blog_get);
 
 //post
 router.post('/blog', upload.single('blog_img'), authRoutes.admin_blog_post);
+router.post('/comment/:blog_id', authRoutes.comment_post);
 
 //update
 router.patch('/update', authRoutes.profile_update);
@@ -27,6 +28,7 @@ router.patch('/edit-blog/:blog_id',upload.single('img'), authRoutes.edit_blog);
 //delete
 router.delete('/remove-phone', authRoutes.remove_phone);
 router.delete('/delete-blog/:blog_id', authRoutes.delete_blog);
+router.delete('/delete-comment',authRoutes.delete_comment);
 
 
 //----------------dev-routes-------------------------------//

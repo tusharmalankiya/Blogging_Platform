@@ -64,3 +64,29 @@ module.exports.admin_logout = (req, res) =>{
   res.redirect('/admin/login');
   // res.json({status:"true", msg:"logged out"});
 }
+
+
+module.exports.reset_password_get = (req, res) =>{
+  res.status(200).render('admin/reset_password');
+}
+
+
+module.exports.reset_password = async (req, res) =>{
+  try {
+    const user = await User.findOne({email:req.body.email});
+    // const user = await User.findByIdAndUpdate(id, req.body);
+    // console.log(newUser);
+    if(user){
+      user.password = req.body.password;
+      await user.save();
+      res.status(201).json({status: "success", user });
+    }else{
+      res.json({errors: {email: "Account does not exist for given email"}});
+    }
+  } catch (err) {
+    const errors = errorHandler(err);
+    console.log(err.message);
+    res.json({ status: "failed", errors });
+  }
+
+}

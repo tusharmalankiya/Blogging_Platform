@@ -1,5 +1,6 @@
 //imports from files
 const Blog = require("./../models/Blog");
+const Comment = require("./../models/Comment");
 
 module.exports.blogs_get = async (req, res) => {
   const data = [];
@@ -43,13 +44,21 @@ module.exports.blogs_get = async (req, res) => {
 };
 
 module.exports.blog_get = async (req, res) => {
+  id = req.id;
   const blog_id = req.params.blog_id;
+  const comments = await get_comments(blog_id);
+  // console.log(comments);
   try{
     const blog = await Blog.findById(blog_id);
     if(!blog){
       return res.render('404');
     }
-    res.render('full_blog', {blog});
+    if(id){
+      console.log(`********************\n${id}\n`);
+      blog.this_user_id = id;
+    }
+    // console.log({...blog, ...comments});
+    res.render('full_blog', {blog, comments});
   }catch(err){
     console.log(err);
   }
@@ -68,3 +77,30 @@ module.exports.author_blogs = (req, res) => {
       res.json({ msg: "error occured" });
     });
 };
+
+
+//--------------dev routes-------------------------
+const get_comments = async (blog_id) => {
+  // const blog_id = req.params.blog_id;
+  try{
+    const comments = await Comment.find({blog_id}).sort({createdAt: 1}).populate('user_id');
+    const data = [];
+    comments.forEach(async (comment)=>{
+      const dataObj = {};
+      dataObj.comment_id = comment._id;
+      dataObj.user_id = comment.user_id._id;
+      dataObj.comment = comment.comment;
+      dataObj.firstname = comment.user_id.firstname;
+      dataObj.lastname = comment.user_id.lastname;
+      dataObj.createdAt = comment.createdAt;
+      data.push(dataObj);
+      // console.log(comment);
+    });
+
+    return data;
+    // res.json(data);
+
+  }catch(err){
+    console.log(err);
+  }
+}

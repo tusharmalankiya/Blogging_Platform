@@ -1,5 +1,6 @@
 const User = require("./../models/User");
 const Blog = require("../models/Blog");
+const Comment = require("./../models/Comment");
 const errorHandler = require("./errorHandler");
 const fs = require('fs').promises;
 
@@ -77,6 +78,26 @@ module.exports.admin_blog_post = (req, res) => {
       res.json(errors);
     });
 };
+
+
+module.exports.comment_post = async (req, res) =>{
+  const user_id = req.id;
+  const blog_id = req.params.blog_id;
+
+  data = {
+    user_id,
+    blog_id,
+    comment: req.body.comment
+  }
+  console.log(data);
+  
+  try{
+    const comment = await Comment.create(data);
+    res.json({ status: "success", comment });
+  } catch (err){
+    console.log(err);
+  }
+}
 
 module.exports.admin_blogs_get = async (req, res) => {
   const id = req.id;
@@ -201,6 +222,19 @@ module.exports.delete_blog = async (req, res) => {
   }
 };
 
+module.exports.delete_comment = async (req, res) => {
+  console.log(req.body);
+  const comment_id = req.body.comment_id;
+  try {
+    const comment = await Comment.findByIdAndDelete(comment_id);
+    console.log(comment);
+   
+    res.json({ status: "success" });
+  } catch (err) {
+    res.json({ status: "error occured" });
+    console.log(err);
+  }
+};
 
 //---------------------dev-modules------------------------------------------//
 //multer-test
