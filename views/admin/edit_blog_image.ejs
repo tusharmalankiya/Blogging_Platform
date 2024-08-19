@@ -3,9 +3,9 @@
   <div class="full_blog_container">
     <div class="full_blog_header">
       <img class="blog_img" src="<%= blog.image %>" alt="BlogImage" />
-      <form>
+      <form id="edit-image">
         <input type="file" name="file1" accept="image/*" />
-        <!-- <button type="submit">Upload</button> -->
+        <button type="submit">Upload</button>
       </form>
       <div class="blog">
         <div class="blog_details">
@@ -29,7 +29,7 @@
       <button onclick="edit_desc()">edit</button>
     </div>
     <div>
-      <button id="submit">Submit</button>
+      <button onclick="edited_blog_submit()">Submit</button>
     </div>
     <div>
       <button onclick="delete_blog()">Delete</button>
@@ -41,13 +41,12 @@
     const title = document.querySelector(`.blog_title`);
     const description = document.querySelector(`.blog_description`);
     // console.log(title);
-    // const form = document.querySelector("#edit-image");
-    // const upload_button = form.querySelector("button[type=submit]");
+    const form = document.querySelector("#edit-image");
+    const upload_button = form.querySelector("button[type=submit]");
     const image = document.querySelector(".blog_img");
-    const image_input = document.querySelector('input[type=file]');
 
     // Preview Image 
-    image_input.addEventListener('change', function (event) {
+    form.querySelector('input[type=file]').addEventListener('change', function (event) {
       const file = event.target.files[0];
 
       if (file) {
@@ -61,42 +60,45 @@
       }
     });
 
-    // form.addEventListener("submit", async (e) => {
-    //   e.preventDefault();
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    //   upload_button.disabled = true;
-    //   upload_button.textContent = "Loading.....";
+      upload_button.disabled = true;
+      upload_button.textContent = "Loading.....";
 
-    //   const img = form.file1.files[0];
-    //   // console.log(img);
-    //   const formData = new FormData();
-    //   formData.append("img", img);
+      const img = form.file1.files[0];
+      console.log(img);
+      const formData = new FormData();
+      formData.append("img", img);
 
-     
-    //   try {
-    //     const res = await fetch("/admin/edit-blog-image/<%= blog._id %>", {
-    //       method: "PATCH",
-    //       body: formData,
-    //     });
+      // Iterate over the FormData entries and log them
+      // formData.forEach((value, key) => {
+      //   console.log(`${key}:`, value);
+      // });
+      try {
+        const res = await fetch("/admin/edit-blog-image/<%= blog._id %>", {
+          method: "PATCH",
+          body: formData,
+        });
 
-    //     const resp = await res.json();
-    //     console.log(resp);
+        const resp = await res.json();
+        console.log(resp);
 
-    //     // Update the image src
-    //     image.src = `${resp.image}?` + new Date().getTime();
+        // Update the image src
+        image.src = `${resp.image}?` + new Date().getTime();
 
-    //     // if (resp._id) {
-    //     // location.assign("/admin/blogs");
-    //     // }
-    //     upload_button.textContent = "Upload";
-    //     upload_button.disabled = false;
+        // if (resp._id) {
+        // location.assign("/admin/blogs");
+        // }
+        upload_button.textContent = "Upload";
+        upload_button.disabled = false;
 
 
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
+      } catch (err) {
+        console.log(err);
+      }
 
-    // });
+    });
 
     const edit_title = () => {
       title.setAttribute("contenteditable", "true");
@@ -108,46 +110,31 @@
       description.focus();
     };
 
-    document.getElementById('submit').addEventListener("click", function(event){
-      event.target.disabled = true;
-      event.target.textContent = "Loading...";
-      
-      img = image_input.files[0];
-
-      const formData = new FormData();
-      formData.append("img", img);
-      formData.append("title", title.textContent);
-      formData.append("description", description.textContent);
-
-      //  Iterate over the FormData entries and log them
-      // formData.forEach((value, key) => {
-      //   console.log(`${key}:`, value);
-      // });
-
-      // data = {
-      //   title: title.textContent,
-      //   description: description.textContent,
-      // };
-      // console.log(data);
+    const edited_blog_submit = () => {
+      data = {
+        title: title.textContent,
+        description: description.textContent,
+      };
+      console.log(data);
 
       fetch("/admin/edit-blog/<%= blog._id %>", {
         method: "PATCH",
-        body: formData,
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
         .then(async (resp) => {
           const res = await resp.json();
           if (res.status === "success") {
-            // console.log(res.blog);
-            event.target.disabled = false;
-            event.target.textContent = "Submit";
+            console.log(res.blog);
             location.assign("/admin/blogs");
           }
         })
         .catch((err) => {
           console.log(err);
         });
-      });
-
+    };
 
     const delete_blog = () => {
       fetch("/admin/delete-blog/<%= blog._id %>", {

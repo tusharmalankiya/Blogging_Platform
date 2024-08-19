@@ -149,7 +149,7 @@ module.exports.edit_blog_get = async (req, res) => {
       return res.render('404');
     }
     // const blog = JSON.stringify(blog_data);
-    console.log(blog);
+    // console.log(blog);
     res.render("admin/edit_blog", { blog });
   } catch (err) {
     console.log(err);
@@ -158,33 +158,26 @@ module.exports.edit_blog_get = async (req, res) => {
 
 module.exports.edit_blog = async (req, res) => {
   const blog_id = req.params.blog_id;
-  try {
-    const blog = await Blog.findByIdAndUpdate(blog_id, req.body);
-    console.log(blog);
-    res.json({ status: "success", blog });
-  } catch (err) {
-    res.json({ status: "error occured" });
-    console.log(err);
-  }
-};
-
-module.exports.edit_blog_image = async (req, res) => {
-  console.log("*********************");
-  const blog_id = req.params.blog_id;
   data = {
-    imageFilepath : req.file.path,
-    image: `/assets/uploads/${req.file.filename}`
-  }
+    title: req.body.title,
+    description: req.body.description
+  };
 
-  try {
+  if(req.file){
+    data.imageFilepath = req.file.path;
+    data.image = `/assets/uploads/${req.file.filename}`;
+
+    // delete old image
     const old_blog = await Blog.findById(blog_id);
     deleteFile(old_blog.imageFilepath);
+  }
+  // console.log(data);
+  try {
 
-    const blog = await Blog.findByIdAndUpdate(blog_id, data, {new: true});
-    // console.log(blog);
+    await Blog.findByIdAndUpdate(blog_id, data);
+
     res.setHeader('Cache-Control', 'max-age=0, must-revalidate');
-
-    res.json({ status: "success", image: blog.image });
+    res.json({ status: "success" });
   } catch (err) {
     res.json({ status: "error occured" });
     console.log(err);
@@ -266,5 +259,27 @@ module.exports.delete_all_users = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: err.message });
+  }
+};
+
+module.exports.edit_blog_image = async (req, res) => {
+  const blog_id = req.params.blog_id;
+  data = {
+    imageFilepath : req.file.path,
+    image: `/assets/uploads/${req.file.filename}`
+  }
+
+  try {
+    const old_blog = await Blog.findById(blog_id);
+    deleteFile(old_blog.imageFilepath);
+
+    const blog = await Blog.findByIdAndUpdate(blog_id, data, {new: true});
+    // console.log(blog);
+    res.setHeader('Cache-Control', 'max-age=0, must-revalidate');
+
+    res.json({ status: "success", image: blog.image });
+  } catch (err) {
+    res.json({ status: "error occured" });
+    console.log(err);
   }
 };
