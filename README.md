@@ -2,7 +2,7 @@
 
 ## Overview
 
-A fully functional blogging platform built with Node.js, Express, MongoDB, and EJS as the view engine. This platform enables users to securely register, log in, and manage their accounts using JWT authentication. Users can create, edit, and delete blog posts, as well as add and manage comments. The platform is designed to be responsive and user-friendly, with a clean and modern interface styled with Bootstrap, HTML, CSS, and front-end JavaScript. Enhanced security is provided through password encryption with bcrypt and structured data management using Mongoose ODM.
+A fully functional ***blogging platform*** built with Node.js, Express, MongoDB, and EJS as the view engine. This platform enables users to securely register, log in, and manage their accounts using JWT authentication. Users can create, edit, and delete blog posts, as well as add and manage comments. The platform is designed to be responsive and user-friendly, with a clean and modern interface styled with Bootstrap, HTML, CSS, and front-end JavaScript. Enhanced security is provided through password encryption with bcrypt and structured data management using Mongoose ODM.
 
 ## Features
 
@@ -31,10 +31,10 @@ A fully functional blogging platform built with Node.js, Express, MongoDB, and E
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/tusharmalankiya/Blogging_Platform.git
+    git clone https://github.com/tusharmalankiya/RadiantPages.git
     ```
     ```bash
-    cd Blogging_Platform
+    cd RadiantPages
     ```
 2. Install Dependencies:
 
@@ -46,7 +46,7 @@ A fully functional blogging platform built with Node.js, Express, MongoDB, and E
 
 2. Add the following environment variables:
     ```bash 
-        MONGO_URI=mongodb://127.0.0.1:27017/blogging_platform
+        MONGO_URI=mongodb://127.0.0.1:27017/radiantpages
         PORT=4000
         JWT_SECRET=mysecret
         TOKEN_AGE=259200
