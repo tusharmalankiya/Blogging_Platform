@@ -46,7 +46,7 @@ A fully functional blogging platform built with Node.js, Express, MongoDB, and E
 
 2. Add the following environment variables:
     ```bash 
-        MONGO_URI=mongodb://localhost:27017/your-database
+        MONGO_URI=mongodb://127.0.0.1:27017/blogging_platform
         PORT=4000
         JWT_SECRET=mysecret
         TOKEN_AGE=259200
