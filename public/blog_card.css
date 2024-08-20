@@ -1,18 +1,20 @@
 .blog_card_container {
   display: flex;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
   /* border: 1px solid black; */
   padding: 20px;
   justify-content: space-between;
   border-radius: 15px;
-  background: pink;
+  /* background: pink; */
   margin: 30px auto;
-  max-width: 900px;
+  /* max-width: 900px; */
   /* height: 300px; */
 }
 
 .blog_img {
   border-radius: 15px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   object-fit: cover;
   flex: 4;
   /* margin: 10px; */
@@ -72,6 +74,7 @@
   justify-content: space-between;
   align-items: center;
   float: bottom;
+  
 }
 
 .more {

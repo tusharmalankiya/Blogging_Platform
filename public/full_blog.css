@@ -1,16 +1,27 @@
 .full_blog_container{
   padding: 20px;
   border-radius: 15px;
-  background: pink;
+  /* background: pink; */
   margin: 30px auto;
-  max-width: 900px;
+  /* max-width: 900px; */
 }
 
-.full_blog_header{
-    display: flex;
-    justify-content: space-between;
+.edit-blog-image{
+  width: fit-content;
+  position: relative;
+  /* display:grid; */
+  /* grid-template-columns: auto auto; */
+  /* border:1px solid black; */
 }
 
+.edit-blog-image input{
+ position: absolute;
+ bottom:10px;
+ /* left: 10px; */
+ width: 100%;
+ overflow: hidden;
+  /* width: 100%; */
+}
 
 @media screen and (max-width: 700px) {
     .full_blog_header {

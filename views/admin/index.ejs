@@ -1,46 +1,47 @@
 <%- include('./../partials/header') %>
 
-<div class="profile_container">
-  <h1>Hello, <%= firstname + ' '+ lastname %></h1>
-  <h3 class="profile_field">Account Details:</h3>
+<div class="p-5 text-center bg-body-tertiary rounded-3">
+  <h1 class="text-body-emphasis">Hello,</h1>
+  <h1><%= firstname + ' '+ lastname %></h1>
+</div>
+<div class="container">
+  <h3 class="display-4">Account Details:</h3>
 
-  <form id="profile_update_form">
+
+  <form id="profile_update_form" class="row">
     <!-- <p class="profile_field"><strong>Username : </strong><%= username %></p> -->
-    <p class="profile_field">
-      <strong>First Name : </strong
-      ><input type="text" name="firstname" value="<%= firstname %>" disabled />
-      <button id="firstname" type="button" onclick="unlock(this.id)">Edit</button>
+    <div class="mb-3">
+      <lable for="firstname" class="form-label"><strong>First Name : </strong></lable>
+      <input class="form-control" type="text" value="<%= firstname %>" name="firstname" disabled />
+      <button id="firstname" type="button" class="btn btn-secondary m-2" onclick="unlock(this.id)">Edit</button>
       <div class="firstname error"></div>
-    </p>
-    <p class="profile_field">
-      <strong>Last Name : </strong
-      ><input type="text" name="lastname" value="<%= lastname %>" disabled />
-      <button id="lastname" type="button" onclick="unlock(this.id)">Edit</button>
+    </div>
+    <div class="mb-3">
+      <lable for="lastname" class="form-label"><strong>Last Name : </strong></lable>
+      <input class="form-control" type="text" value="<%= lastname %>" name="lastname" disabled />
+      <button id="lastname" type="button" class="btn btn-secondary m-2" onclick="unlock(this.id)">Edit</button>
       <div class="lastname error"></div>
-
-    </p>
-    <p class="profile_field">
-      <strong>Username : </strong
-      ><input type="text" name="username" value="<%= username %>" disabled />
-      <button id="username" type="button" onclick="unlock(this.id)">Edit</button>
+    </div>
+    <div class="mb-3">
+      <lable for="username" class="form-label"><strong>Username : </strong></lable>
+      <input class="form-control" type="text" value="<%= username %>" name="username" disabled />
+      <button id="username" type="button" class="btn btn-secondary m-2" onclick="unlock(this.id)">Edit</button>
       <div class="username error"></div>
-
-    </p>
-    <p class="profile_field">
-      <strong>Phone : </strong
-      ><input type="text" name="phone" value="<%= phone %>" disabled />
-      <button id="phone" type="button" onclick="unlock(this.id)">Edit</button>
-      <button type="button" onclick="remove_phone()">Remove</button>
+    </div>
+    <div class="mb-3">
+      <lable for="phone" class="form-label"><strong>Phone : </strong></lable>
+      <input class="form-control" type="number" value="<%= phone %>" name="phone" disabled />
+      <button id="phone" type="button" class="btn btn-secondary m-2" onclick="unlock(this.id)">Edit</button>
       <div class="phone error"></div>
-
-    </p>
-    <p class="profile_field">
-      <strong>Email :</strong
-      ><input type="text" name="email" value="<%= email %>" disabled />
-      <button id="email" type="button" onclick="unlock(this.id)">Edit</button>
+    </div>
+    <div class="mb-3">
+      <lable for="email" class="form-label"><strong>Email : </strong></lable>
+      <input class="form-control" type="email" value="<%= email %>" name="email" disabled />
+      <button id="email" type="button" class="btn btn-secondary m-2" onclick="unlock(this.id)">Edit</button>
       <div class="email error"></div>
+    </div>
+    
 
-    </p>
     <p class="profile_field">
       <strong>Account created on :</strong><%=
       createdAt.toLocaleDateString('en-GB') + ' ' +
@@ -50,10 +51,10 @@
       <strong>Last update :</strong><%= updatedAt.toLocaleDateString('en-GB') +
       '' + updatedAt.toLocaleTimeString('en-US', {hour12: false}); %>
     </p>
-    <button id="profile_update" type="submit" form="profile_update_form" disabled>Update</button>
+    <button id="profile_update" type="submit" class="btn btn-primary w-100" form="profile_update_form" disabled>Update</button>
   </form>
 </div>
-<a href="/admin/logout">Logout</a>
+<a href="/admin/logout" class="btn btn-primary w-100 my-3">Logout</a>
 
 <script>
 
@@ -64,12 +65,14 @@ const form = document.getElementById('profile_update_form');
   const emailError = document.querySelector('.email.error');
   const lastnameError = document.querySelector('.lastname.error');
   const phoneError = document.querySelector('.phone.error');
+
+  const submitButton = document.querySelector('#profile_update');
   
   const unlock = (id) => {
     // console.log(id);
     is_edited = true;
     document.querySelector(`input[name=${id}]`).disabled= false;
-    document.querySelector('#profile_update').disabled = false;
+    submitButton.disabled = false;
     console.log("clicked");
   };
 
@@ -98,6 +101,9 @@ const form = document.getElementById('profile_update_form');
     phoneError.textContent = "";
     emailError.textContent = "";
 
+    submitButton.disabled = true;
+    submitButton.textContent = "Loading...";
+
     const phone  = document.querySelector(`input[name=phone]`).value;
     const data = {
       firstname: document.querySelector(`input[name=firstname]`).value,
@@ -121,7 +127,7 @@ const form = document.getElementById('profile_update_form');
     if(res.status === 'success'){
       console.log(res.user);
       console.log("data updated");
-      location.assign('/admin');
+      location.reload();
     }else{
       if(res.errors){
         const keys = Object.keys(res.errors);

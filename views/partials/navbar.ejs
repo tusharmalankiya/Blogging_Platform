@@ -1,52 +1,68 @@
-<div class="navbar-side-menu">
-  <ul class="nav-options">
-    <li class="navbar-menu-item"><a href="/">Home</a></li>
-    <!-- <li class="navbar-menu-item"><a href="/">Authors</a></li> -->
-    
-    
-    <li class="navbar-menu-item login"><a href="/admin">Profile</a></li>
-    <li class="navbar-menu-item login"><a href="/admin/blogs">Your Blogs</a></li>
-    <li class="navbar-menu-item login"><a href="/admin/blog">New Blog</a></li>
-    <li class="navbar-menu-item login"><a href="/admin/manage">Manage</a></li>
-    <li class="navbar-menu-item login" onclick="signout()"><a href="/admin/logout">Sign Out</a></li>
-   
-    <li class="navbar-menu-item logout"><a href="/admin/login">Sign In</a></li>
-    <li class="navbar-menu-item logout"><a href="/admin/register">Sign Up</a></li>
-   
-  </ul>
-</div>
-<div class="navbar-layer" onclick="close_navbar()"></div>
+<nav>
+  <div class="navbar-side-menu">
+    <ul class="nav-options">
+      <li class="navbar-menu-item"><a href="/">Home</a></li>
 
 
-<div class="navbar-container">
-  <div class="navbar">
-    <div class="navbar-options" onclick="clicked()"><img src='/assets/menu.png' /></div>
-    <a href="/"><div class="navbar-logo">Screwy</div></a>
-    <div class="navbar-search"><img src='/assets/search.png' /></div>
+      <li class="navbar-menu-item login"><a href="/admin">Profile</a></li>
+      <li class="navbar-menu-item login"><a href="/admin/blogs">Your Blogs</a></li>
+      <li class="navbar-menu-item login"><a href="/admin/blog">New Blog</a></li>
+      <li class="navbar-menu-item login"><a href="/admin/manage">Manage</a></li>
+      <li class="navbar-menu-item login" onclick="signout()"><a href="/admin/logout">Sign Out</a></li>
+
+      <li class="navbar-menu-item logout"><a href="/admin/login">Sign In</a></li>
+      <li class="navbar-menu-item logout"><a href="/admin/register">Sign Up</a></li>
+    </ul>
   </div>
-</div>
 
+
+  <div class="navbar-layer" onclick="close_navbar()"></div>
+
+
+  <div class="container-fluid bg-secondary-subtle">
+    <div class="navbar">
+      <a href="/">
+        <div class="navbar-logo">Screwy</div>
+      </a>
+      <div class="navbar-options" onclick="clicked()"><img src='/assets/menu.png' /></div>
+    </div>
+  </div>
+</nav>
+
+
+<!-- kkd -->
 <script>
-  if(localStorage.getItem('login')){
-    document.querySelectorAll('.navbar-menu-item.login').forEach(element=>{
-      // console.log(element);
+  const navbar_menu = document.querySelector('.navbar-side-menu');
+  const clicked = () => {
+    console.log("clicked");
+    navbar_menu.style.width = '250px';
+    document.body.style.overflow = 'hidden';
+    document.querySelector(".navbar-layer").style.display = 'initial';
+  }
+
+  const close_navbar = () => {
+    navbar_menu.style.width = '0';
+    document.body.style.overflow = 'auto';
+    document.querySelector(".navbar-layer").style.display = 'none';
+  }
+  if (localStorage.getItem('login')) {
+    document.querySelectorAll('.navbar-menu-item.login').forEach(element => {
       element.style.display = "initial";
     });
-    document.querySelectorAll('.navbar-menu-item.logout').forEach(element=>{
+    document.querySelectorAll('.navbar-menu-item.logout').forEach(element => {
       element.style.display = "none";
     });
-  }else{
-    document.querySelectorAll('.navbar-menu-item.login').forEach(element=>{
+  } else {
+    document.querySelectorAll('.navbar-menu-item.login').forEach(element => {
       // console.log(element);
       element.style.display = "none";
     });
-    document.querySelectorAll('.navbar-menu-item.logout').forEach(element=>{
+    document.querySelectorAll('.navbar-menu-item.logout').forEach(element => {
       element.style.display = "initial";
     });
   }
 
-  const signout = () =>{
+  const signout = () => {
     localStorage.clear();
   }
 </script>
-

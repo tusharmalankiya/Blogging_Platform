@@ -1,15 +1,17 @@
 <%- include('partials/header') %>
 
-  <div class="full_blog_container">
+  <div class="full_blog_container bg-body-secondary">
     <div class="full_blog_header">
+      <div class="blog_details">
+        <!-- <p><%= blog.email %></p> -->
+        <p class="blog_date ">
+          <%= blog.updatedAt.toLocaleString() %>
+        </p>
+      </div>
+
       <img class="blog_img" src="<%= blog.image %>" alt="BlogImage" />
       <div class="blog">
-        <div class="blog_details">
-          <!-- <p><%= blog.email %></p> -->
-          <p class="blog_date ">
-            <%= blog.updatedAt.toLocaleString() %>
-          </p>
-        </div>
+
         <h2 class="blog_title">
           <%= blog.title %>
         </h2>
@@ -19,101 +21,118 @@
       <%= blog.description %>
     </p>
   </div>
-  <section class="comment-section">
-    <form>
-      <textarea name="comment" rows="5" cols="30"></textarea>
-      <button type="submit">Comment</button>
-    </form>
+  <section class="comment-section mb-4">
+
+    <!-- Comment Form -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Leave a Comment</h5>
+        <form id="commentForm">
+          <div class="mb-3">
+            <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Write your comment here..."
+              required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Post Comment</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="list-group">
+      <% comments.forEach((comment)=>{ %>
+        <div class="list-group-item">
+          <!-- Comment Header -->
+          <div class="d-flex w-100 justify-content-between align-items-center">
+            <h5 class="mb-1">
+              <%= comment.firstname + ' ' + comment.lastname %>
+            </h5>
+            <small class="text-muted">
+              <%= new Date(comment.createdAt).toLocaleDateString() %>
+            </small>
+          </div>
+
+          <!-- Comment Body -->
+          <p class="mb-1">
+            <%= comment.comment %>
+          </p>
+
+          <!-- Delete Button (only for the comment's author) -->
+          <% if(blog.this_user_id==comment.user_id){ %>
+            <form method="DELETE" class="d-inline">
+              <input type="hidden" name="comment_id" value="<%= comment.comment_id %>">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+            <% } %>
+        </div>
+        <% }) %>
+    </div>
   </section>
 
-  <% comments.forEach((comment)=>{ %>
-    <div>
-      <div>
-        <%= comment.firstname + ' ' + comment.lastname %>
-      </div>
-      <div>
-        <%= comment.comment %>
-      </div>
-      <div>
-        <%= comment.createdAt %>
-      </div>
-      <% if(blog.this_user_id==comment.user_id){ %>
-        <form method="DELETE">
-          <input type="hidden" name="comment_id" value="<%= comment.comment_id %>">
-          <button type="submit">Delete</button>
-        </form>
-        <% } %>
+  <script>
+    const form = document.querySelector("#commentForm");
 
-    </div>
-    <hr />
-    <% }) %>
+    const DeleteForms = document.querySelectorAll('form[method=DELETE]');
 
-      <script>
-        const form = document.querySelector("section form");
+    DeleteForms.forEach(form => {
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-        const DeleteForms = document.querySelectorAll('form[method=DELETE]');
-
-        DeleteForms.forEach(form => {
-          form.addEventListener("submit", async function (event) {
-            event.preventDefault();
-
-            const DeleteButton = form.querySelector('button')
-            DeleteButton.disabled = true;
-            DeleteButton.textContent = "Loading";
+        const DeleteButton = form.querySelector('button')
+        DeleteButton.disabled = true;
+        DeleteButton.textContent = "Loading";
 
 
-            const comment_id = form.comment_id.value;
+        const comment_id = form.comment_id.value;
 
-            fetch("/admin/delete-comment/", {
-              method: "DELETE",
-              body: JSON.stringify({ comment_id }),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }).then(async (resp) => {
-              const res = await resp.json();
-              if (res.status == "success") {
-                console.log("comment deleted succefully");
-                location.reload();
-              }
-            }).catch((err) => {
-              console.log(err);
-            })
+        fetch("/admin/delete-comment/", {
+          method: "DELETE",
+          body: JSON.stringify({ comment_id }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then(async (resp) => {
+          const res = await resp.json();
+          if (res.status == "success") {
+            console.log("comment deleted succefully");
+            location.reload();
           }
-          )
-
+        }).catch((err) => {
+          console.log(err);
         })
+      }
+      )
 
-        form.addEventListener("submit", function (e) {
-          e.preventDefault();
-          const comment = form.comment.value;
+    })
 
-          const commentButton = form.querySelector('button');
-          commentButton.disabled = true;
-          commentButton.textContent = "Loading...";
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const comment = form.comment.value;
 
-          data = {
-            comment: comment,
+      const commentButton = form.querySelector('button');
+      commentButton.disabled = true;
+      commentButton.textContent = "Loading...";
+
+      data = {
+        comment: comment,
+      }
+
+      fetch("/admin/comment/<%= blog._id %>", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then(async (resp) => {
+          const res = await resp.json();
+          if (res.status === "success") {
+            console.log("comment posted successfully");
+            location.reload();
           }
-
-          fetch("/admin/comment/<%= blog._id %>", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-            .then(async (resp) => {
-              const res = await resp.json();
-              if (res.status === "success") {
-                console.log("comment posted successfully");
-                location.reload();
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
         })
-      </script>
+        .catch((err) => {
+          console.log(err);
+        });
+    })
+  </script>
 
-      <%- include('partials/footer') %>
+  <%- include('partials/footer') %>

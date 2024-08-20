@@ -1,18 +1,21 @@
 <%- include('./../partials/header') %>
 
 <h1>Blog post</h1>
+<hr />
 <form>
-  <input type="file" name="file1" accept="image/*" />
-  <div>
-    <lable for="title">Title: </lable>
-    <input type="text" name="title" />
+  <div class="mb-3">
+    <label for="blog_image" class="form-label">Select Blog Image:</label>
+    <input class="form-control" name="file1" accept="image/*" type="file" id="blog_image">
   </div>
-
-  <label for="description">Description:</label>
-  <div>
-    <textarea name="description" rows="10" cols="30"></textarea>
+  <div class="mb-3">
+    <label for="title" class="form-label">Title:</label>
+    <input type="text" name="title" class="form-control" id="title">
   </div>
-  <button type="submit">Submit</button>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description:</label>
+    <textarea class="form-control" name="description" rows="3"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary w-100">Submit</button>
 </form>
 
 <script>

@@ -215,6 +215,8 @@ module.exports.delete_blog = async (req, res) => {
     if(blog.imageFilepath){
       deleteFile(blog.imageFilepath);
     }
+    const comments = await Comment.deleteMany({blog_id});
+    console.log(comments);
     res.json({ status: "success", blog });
   } catch (err) {
     res.json({ status: "error occured" });

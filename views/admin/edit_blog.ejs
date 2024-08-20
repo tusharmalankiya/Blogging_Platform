@@ -1,50 +1,50 @@
 <%- include('./../partials/header') %>
 
-  <div class="full_blog_container">
-    <div class="full_blog_header">
-      <img class="blog_img" src="<%= blog.image %>" alt="BlogImage" />
-      <form>
-        <input type="file" name="file1" accept="image/*" />
-        <!-- <button type="submit">Upload</button> -->
-      </form>
-      <div class="blog">
-        <div class="blog_details">
-          <!-- <p><%= blog.email %></p> -->
-          <p class="blog_date">
-            <%= blog.updatedAt.toLocaleString() %>
-          </p>
-        </div>
-        <div>
-          <h2 contenteditable="false" class="blog_title">
-            <%= blog.title %>
-          </h2>
-          <button onclick="edit_title()">edit</button>
-        </div>
+  <div class="full_blog_container bg-body-secondary">
+    <div>
+      <div class="blog_details">
+        <p class="blog_date">
+          <%= blog.updatedAt.toLocaleString() %>
+        </p>
+      </div>
+
+      <div class="mb-3 edit-blog-image">
+        <input class="form-control" name="file1" accept="image/*" type="file">
+        <img class="blog_img" src="<%= blog.image %>" alt="BlogImage" />
+      </div>
+
+    </div>
+
+    <hr>
+    <div class="blog">
+      <div>
+        <h2 style="display: inline-block;" contenteditable="false" class="blog_title">
+          <%= blog.title %>
+        </h2>
+        <button class="btn btn-secondary mx-2" onclick="edit_title()">Edit Title</button>
       </div>
     </div>
+    <hr>
     <div>
       <p contenteditable="false" class="blog_description">
         <%= blog.description %>
       </p>
-      <button onclick="edit_desc()">edit</button>
+      <button class="btn btn-secondary" onclick="edit_desc()">Edit Description</button>
+    </div>
+    <hr>
+    <div>
+      <button class="btn btn-primary w-100 my-2" id="submit">Submit</button>
     </div>
     <div>
-      <button id="submit">Submit</button>
-    </div>
-    <div>
-      <button onclick="delete_blog()">Delete</button>
+      <button class="btn btn-danger w-100 my-2" onclick="delete_blog()">Delete Blog</button>
     </div>
   </div>
 
   <script>
-    // console.log('<%= blog._id %>');
     const title = document.querySelector(`.blog_title`);
     const description = document.querySelector(`.blog_description`);
-    // console.log(title);
-    // const form = document.querySelector("#edit-image");
-    // const upload_button = form.querySelector("button[type=submit]");
     const image = document.querySelector(".blog_img");
-    const image_input = document.querySelector('input[type=file]');
+    const image_input = document.querySelector('input[name=file1]');
 
     // Preview Image 
     image_input.addEventListener('change', function (event) {
@@ -61,43 +61,6 @@
       }
     });
 
-    // form.addEventListener("submit", async (e) => {
-    //   e.preventDefault();
-
-    //   upload_button.disabled = true;
-    //   upload_button.textContent = "Loading.....";
-
-    //   const img = form.file1.files[0];
-    //   // console.log(img);
-    //   const formData = new FormData();
-    //   formData.append("img", img);
-
-     
-    //   try {
-    //     const res = await fetch("/admin/edit-blog-image/<%= blog._id %>", {
-    //       method: "PATCH",
-    //       body: formData,
-    //     });
-
-    //     const resp = await res.json();
-    //     console.log(resp);
-
-    //     // Update the image src
-    //     image.src = `${resp.image}?` + new Date().getTime();
-
-    //     // if (resp._id) {
-    //     // location.assign("/admin/blogs");
-    //     // }
-    //     upload_button.textContent = "Upload";
-    //     upload_button.disabled = false;
-
-
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-
-    // });
-
     const edit_title = () => {
       title.setAttribute("contenteditable", "true");
       title.focus();
@@ -108,10 +71,10 @@
       description.focus();
     };
 
-    document.getElementById('submit').addEventListener("click", function(event){
+    document.getElementById('submit').addEventListener("click", function (event) {
       event.target.disabled = true;
       event.target.textContent = "Loading...";
-      
+
       img = image_input.files[0];
 
       const formData = new FormData();
@@ -123,12 +86,6 @@
       // formData.forEach((value, key) => {
       //   console.log(`${key}:`, value);
       // });
-
-      // data = {
-      //   title: title.textContent,
-      //   description: description.textContent,
-      // };
-      // console.log(data);
 
       fetch("/admin/edit-blog/<%= blog._id %>", {
         method: "PATCH",
@@ -146,7 +103,7 @@
         .catch((err) => {
           console.log(err);
         });
-      });
+    });
 
 
     const delete_blog = () => {

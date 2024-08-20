@@ -1,57 +1,68 @@
 <%- include('./../partials/header') %>
+  <div class="container">
+    <h1>Admin Login</h1>
+    <form id="login-form">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp">
+        <div class="error login_email_error"></div>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" name="password" id="password">
+        <div class="error login_password_error"></div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
 
-<h1>Admin Login</h1>
-<form>
-  <lable for="email">Email: </lable>
-  <input type="text" name="email" class="email" />
-  <div class="login_email_error"></div>
-  <label for="password">Password: </label>
-  <input type="password" name="password" />
-  <button type="submit">Login</button>
-  <div class="login_password_error"></div>
-</form>
+    <br />
+    <a href="/admin/register">
+      <h3>Sign Up</h3>
+    </a>
+    <a href="/admin/reset-password">
+      <h3>Reset Password</h3>
+    </a>
+    <br />
 
-<br />
-<a href="/admin/register"><h3>Sign Up</h3></a>
-<a href="/admin/reset-password"><h3>Reset Password</h3></a>
-<br />
+  </div>
 
-<script>
-  const form = document.querySelector("form");
-  const emailError = document.querySelector(".login_email_error");
-  const passwordError = document.querySelector(".login_password_error");
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const email = form.email.value;
-    const password = form.password.value;
-    emailError.textContent = "";
-    passwordError.textContent = "";
 
-    const data = { email, password };
+  <script>
+    const form = document.querySelector("#login-form");
+    const emailError = document.querySelector(".login_email_error");
+    const passwordError = document.querySelector(".login_password_error");
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = form.email.value;
+      const password = form.password.value;
+      emailError.textContent = "";
+      passwordError.textContent = "";
 
-    fetch("/admin/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(async (res) => {
-      const response = await res.json();
-      if (response.user) {
-        location.assign("/");
-        localStorage.setItem("login", "true");
-      } else {
-        if (response.errors.email) {
-          emailError.textContent = response.errors.email;
+      const data = { email, password };
+
+      fetch("/admin/login", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(async (res) => {
+        const response = await res.json();
+        if (response.user) {
+          location.assign("/");
+          localStorage.setItem("login", "true");
+        } else {
+          if (response.errors.email) {
+            emailError.textContent = response.errors.email;
+          }
+          if (response.errors.password) {
+            passwordError.textContent = response.errors.password;
+          }
         }
-        if (response.errors.password) {
-          emailError.textContent = response.errors.password;
-        }
-      }
+      });
+
+      console.log("form submitted");
     });
+  </script>
 
-    console.log("form submitted");
-  });
-</script>
-
-<%- include('./../partials/footer') %>
+  <%- include('./../partials/footer') %>

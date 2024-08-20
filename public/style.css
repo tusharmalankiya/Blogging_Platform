@@ -16,14 +16,22 @@
   /* overflow: hidden; */
 }
 
+a{
+  text-decoration: none !important;
+}
+
 body {
-  padding: 20px;
-  background: var(--background-color);
-  padding: 40px;
+  /* padding: 20px; */
+  /* background: var(--background-color); */
+  /* padding: 15px; */
   font-family: "Roboto", sans-serif;
   /* overflow: hidden; */
 }
 
 .error{
   color: red;
+}
+
+main{
+  min-height: calc(100vh - 160px - 100px);
 }

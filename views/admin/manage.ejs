@@ -1,16 +1,32 @@
 <%- include('./../partials/header') %>
 
-  <h1>Change Password</h1>
+  <div class="container mt-5">
+    <!-- Page Header -->
+    <h1 class="mb-4">Change Password</h1>
 
-  <form id="password_change">
-    <input name="password" type="password" />
-    <h1 class="password_changed"></h1>
-    <div class="password error"></div>
-    <button>submit</button>
-  </form>
+    <!-- Password Change Form -->
+    <form id="password_change" class="mb-3">
+      <!-- Password Input -->
+      <div class="mb-3">
+        <label for="password" class="form-label">New Password</label>
+        <input name="password" type="password" class="form-control" id="password" placeholder="Enter new password"
+          required />
+      </div>
 
-  <div>
-    <button onclick="account_delete()">Delete Account</button>
+      <!-- Password Changed Message -->
+      <h1 class="password_changed text-success"></h1>
+
+      <!-- Error Message -->
+      <div class="password error text-danger"></div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <!-- Account Delete Section -->
+    <div>
+      <button onclick="account_delete()" class="btn btn-danger">Delete Account</button>
+    </div>
   </div>
 
   <script>

@@ -1,10 +1,9 @@
 <%- include('./../partials/header') %>
-<h1>Your Blogs</h1>
+<h1 class="text-center">Your Blogs</h1>
 <hr />
-<br />
-<br />
+
 <% if(blogs.length > 0 ){ %> <% blogs.forEach((blog) =>{ %>
-<div class="blog_card_container">
+<div class="blog_card_container bg-body-secondary">
   <img class="blog_img" src="<%= blog.image %>" alt="BlogImage" />
   <div class="blog">
     <div>

@@ -1,79 +1,88 @@
 <%- include('./../partials/header') %>
+  <div class="container">
 
-<h1>Admin Register</h1>
-<form>
-  <div>
-    <lable for="firstname">First Name: </lable>
-    <input type="text" name="firstname" />
-    <div class="error firstname"></div>
+    <h1>Admin Register</h1>
+    <form>
+      <!-- <div class="mb-3">
+    <label for="email" class="form-label">Email address</label>
+    <input type="email" name="email" class="form-control" id="email" >
+    <div class="form-text login_email_error"></div>
+  </div> -->
+      <div class="mb-3">
+        <lable for="firstname" class="form-label">First Name </lable>
+        <input class="form-control" id="firstname" type="text" name="firstname" />
+        <div class="error firstname"></div>
+      </div>
+      <div class="mb-3">
+        <lable for="lastname" class="form-label">Last Name </lable>
+        <input class="form-control" id="lastname" type="text" name="lastname" />
+        <div class="error lastname"></div>
+      </div>
+      <div class="mb-3">
+        <lable for="username" class="form-label">Username </lable>
+        <input class="form-control" type="text" id="username" name="username" />
+        <div class="error username"></div>
+      </div>
+      <div class="mb-3">
+        <lable for="phone" class="form-label">Phone (optional) </lable>
+        <input class="form-control" type="text" id="phone" name="phone" />
+        <div class="error phone"></div>
+      </div>
+      <div class="mb-3">
+        <lable for="email" class="form-label">Email </lable>
+        <input class="form-control" type="email" id="email" name="email" />
+        <div class="error email"></div>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input class="form-control" type="password" id="password" name="password" />
+        <div class="error password"></div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Register</button>
+    </form>
+    <br />
+    <a href="/admin/login">
+      <h3>Log In</h3>
+    </a>
+    <br />
   </div>
-  <div>
-    <lable for="lastname">Last Name: </lable>
-    <input type="text" name="lastname" />
-    <div class="error lastname"></div>
-  </div>
-  <div>
-    <lable for="username">Username: </lable>
-    <input type="text" name="username" />
-    <div class="error username"></div>
-  </div>
-  <div>
-    <lable for="phone">Phone (optional): </lable>
-    <input type="text" name="phone" />
-    <div class="error phone"></div>
-  </div>
-  <div>
-    <lable for="email">Email: </lable>
-    <input type="text" name="email" />
-    <div class="error email"></div>
-  </div>
-  <div>
-    <label for="password">Password: </label>
-    <input type="password" name="password" />
-    <div class="error password"></div>
-  </div>
-  <button type="submit">Register</button>
-</form>
 
-<br />
-<a href="/admin/login"><h3>Log In</h3></a>
-<br />
 
-<script>
-  const form = document.querySelector("form");
+  <script>
+    const form = document.querySelector("form");
 
-  const firstnameError = document.querySelector(".firstname.error");
-  const lastnameError = document.querySelector(".lastname.error");
-  const usernameError = document.querySelector(".username.error");
-  const phoneError = document.querySelector(".phone.error");
-  const emailError = document.querySelector(".email.error");
-  const passwordError = document.querySelector(".password.error");
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    // console.log(form);
-    const firstname = form.firstname.value;
-    const lastname = form.lastname.value;
-    const username = form.username.value;
-    const phone = form.phone.value;
-    const email = form.email.value;
-    const password = form.password.value;
+    const firstnameError = document.querySelector(".firstname.error");
+    const lastnameError = document.querySelector(".lastname.error");
+    const usernameError = document.querySelector(".username.error");
+    const phoneError = document.querySelector(".phone.error");
+    const emailError = document.querySelector(".email.error");
+    const passwordError = document.querySelector(".password.error");
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      // console.log(form);
+      const firstname = form.firstname.value;
+      const lastname = form.lastname.value;
+      const username = form.username.value;
+      const phone = form.phone.value;
+      const email = form.email.value;
+      const password = form.password.value;
 
-    const data = { firstname, lastname, username, email, password };
-    
-    if(phone !== ""){
-      data.phone = phone;
-    }
+      const data = { firstname, lastname, username, email, password };
 
-    fetch("/admin/register", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then( async (res) => {
+      if (phone !== "") {
+        data.phone = phone;
+      }
+
+      fetch("/admin/register", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(async (res) => {
         const response = await res.json();
         console.log(response);
-        if(response.errors){
+        if (response.errors) {
           firstnameError.textContent = response.errors.firstname;
           lastnameError.textContent = response.errors.lastname;
           usernameError.textContent = response.errors.username;
@@ -82,14 +91,14 @@
           passwordError.textContent = response.errors.password;
         }
 
-        if(response._id){
-            location.assign('/admin');
+        if (response._id) {
+          location.assign('/admin');
         }
+      });
+
+      console.log(data);
+      console.log("form submitted");
     });
+  </script>
 
-    console.log(data);
-    console.log("form submitted");
-  });
-</script>
-
-<%- include('./../partials/footer') %>
+  <%- include('./../partials/footer') %>
