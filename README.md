@@ -1,4 +1,4 @@
-# Blogging Platform
+# RadiantPages
 
 ## Overview
 
