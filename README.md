@@ -42,7 +42,7 @@ A fully functional blogging platform built with Node.js, Express, MongoDB, and E
     npm install
     ```
 ## Configuration
-1. Create a .env file in the root directory of the project.
+1. Create a `.env` file in the root directory of the project.
 
 2. Add the following environment variables:
     ```bash 
